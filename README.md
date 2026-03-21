@@ -12,7 +12,7 @@ npx serve .
 
 ## Deploy
 
-Upload the HTML pages, `styles.css`, `script.js`, and `assets/` to your web host (or connect this folder to Netlify / Cloudflare Pages / GitHub Pages). The **Blog** section and header CTA point to [blogs.mdhakite.xyz](https://blogs.mdhakite.xyz) (configure DNS/hosting so that subdomain serves your blog).
+Upload the HTML pages, `styles.css`, `script.js`, and `assets/` to your web host (or connect this folder to Netlify / Cloudflare Pages / GitHub Pages). The **Blog** section and header CTA point to [blog.mdhakite.xyz](https://blog.mdhakite.xyz) (configure DNS/hosting so that subdomain serves your blog).
 
 ## Assets
 
