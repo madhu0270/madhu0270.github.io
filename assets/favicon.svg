@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Madhusudan Dhakite">
+  <style>
+    .tile {
+      fill: #2f5d50;
+    }
+    .letter {
+      fill: #f0ebe3;
+      font: 700 11px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      .tile {
+        fill: #1e3d34;
+      }
+      .letter {
+        fill: #7bc4a8;
+      }
+    }
+  </style>
+  <rect class="tile" width="32" height="32" rx="9" />
+  <text class="letter" x="16" y="21" text-anchor="middle">MD</text>
+</svg>
