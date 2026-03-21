@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side projects &amp; web tools | Madhusudan Dhakite</title>
+    <meta
+      name="description"
+      content="Side projects by Madhusudan Dhakite: invoice generator, mFin finance planner, jsPDF prescription demo, Enamel Craft dental site, and static portfolio, stack notes, live previews, and delivery context."
+    />
+    <meta
+      name="keywords"
+      content="Madhusudan Dhakite projects, invoice generator, mFin app, prescription PDF generator, jsPDF, static portfolio, dental clinic website, web tools QA manager"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://mdhakite.xyz/projects.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Madhusudan Dhakite" />
+    <meta property="og:title" content="Side projects &amp; web tools | Madhusudan Dhakite" />
+    <meta
+      property="og:description"
+      content="Live demos and write-ups: invoice tool, mFin, PDF utilities, client healthcare site, and portfolio engineering."
+    />
+    <meta property="og:url" content="https://mdhakite.xyz/projects.html" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content="https://mdhakite.xyz/assets/headshot.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Side projects &amp; web tools | Madhusudan Dhakite" />
+    <meta
+      name="twitter:description"
+      content="Browser-based tools and sites from a QA manager who still ships code, demos, stacks, and links."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Side projects and web tools",
+        "url": "https://mdhakite.xyz/projects.html",
+        "description": "Detailed overview of Madhusudan Dhakite's public web apps and client sites: invoice generator, mFin, PDF tools, healthcare marketing site, and portfolio.",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Madhusudan Dhakite",
+          "url": "https://mdhakite.xyz/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <a class="logo" href="index.html">Madhusudan Dhakite</a>
+          <p class="logo-sub">Software Quality Assurance Manager</p>
+        </div>
+        <div class="header-tools">
+          <nav class="nav" aria-label="Primary">
+            <a href="index.html#about">About</a>
+            <a href="projects.html" class="nav-link--current" aria-current="page">Projects</a>
+            <a href="index.html#blog">Blog</a>
+            <a href="index.html#podcast">Podcast</a>
+            <a href="index.html#connect">Contact</a>
+          </nav>
+          <button
+            type="button"
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="Switch to dark mode"
+            title="Dark mode"
+          >
+            <span class="theme-toggle-icon theme-toggle-icon--sun" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+              </svg>
+            </span>
+            <span class="theme-toggle-icon theme-toggle-icon--moon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+          <button
+            type="button"
+            class="nav-toggle"
+            aria-expanded="false"
+            aria-controls="nav-panel"
+            aria-label="Open menu"
+          >
+            <span class="nav-toggle-bars" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <div id="nav-panel" class="nav-panel" hidden>
+        <a href="index.html#about">About</a>
+        <a href="projects.html" class="nav-link--current" aria-current="page">Projects</a>
+        <a href="index.html#blog">Blog</a>
+        <a href="index.html#podcast">Podcast</a>
+        <a href="index.html#connect">Contact</a>
+      </div>
+    </header>
+
+    <main id="main" class="projects-page-main">
+      <header class="projects-page-hero">
+        <h1>Side projects</h1>
+        <p class="projects-page-lede">
+          I lead quality by day and still <strong>ship product-shaped web tools</strong> on
+          the side, client sites, browser utilities, and demos that stay honest about scope
+          and stack. Below: what each build is for, how it’s built, and where to try it live.
+        </p>
+        <div class="projects-page-actions">
+          <a class="btn btn-primary" href="index.html#projects">Back to home overview</a>
+          <a class="btn btn-ghost" href="index.html#connect">Hire or collaborate</a>
+        </div>
+      </header>
+
+      <article class="project-detail" id="invoice-generator">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Web app · Productivity</p>
+          <time datetime="2024-08">Aug 2024</time>
+        </div>
+        <h2 class="project-detail-title">Invoice generator for small businesses</h2>
+        <div class="project-detail-grid">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Desk with calculator, invoice papers, and pen"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              A self-contained HTML tool for owners who outgrow spreadsheets but don’t want a
+              full accounting product. You can add line items, apply tax presets, and produce a
+              print-friendly layout from the browser.
+            </p>
+            <p>
+              The focus is on <strong>speed and clarity</strong>: reusable client fields,
+              sensible defaults, and no sign-up, everything runs in the page so demos stay private
+              and easy to host on static file hosting.
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Problem:</strong> ad-hoc invoices in messy sheets and inconsistent PDFs.</li>
+              <li><strong>Approach:</strong> single-page app patterns with vanilla JS and careful form UX.</li>
+              <li><strong>Outcome:</strong> a shareable link teams can bookmark and use offline-first in practice.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>HTML, CSS, JavaScript · Client-side PDF / print styling · No backend</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a
+                class="btn btn-primary"
+                href="invoice-generator.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open live preview</a
+              >
+              <a class="btn btn-ghost" href="index.html#connect">Discuss a similar build</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-detail" id="enamel-craft">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Marketing site · Healthcare</p>
+          <time datetime="2025-01">Jan 2025</time>
+        </div>
+        <h2 class="project-detail-title">Business website for a dental clinic</h2>
+        <div class="project-detail-grid project-detail-grid--reverse">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Bright modern dental clinic treatment room"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              A marketing site for <strong>Enamel Craft Dental Studio</strong>: services, team,
+              hours, and contact blocks that work on phones first. The goal was a fast,
+              trustworthy presence that staff can keep up to date without fighting the CMS.
+            </p>
+            <p>
+              Structured content and <strong>SEO-oriented</strong> copy help local discovery;
+              performance and accessibility choices mirror how real patients actually browse
+              (search, maps, click-to-call).
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Audience:</strong> new patients comparing clinics in the area.</li>
+              <li><strong>Constraints:</strong> clear service taxonomy, credible bios, strong CTAs.</li>
+              <li><strong>Delivery:</strong> deployed site with analytics-friendly markup.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>Static / template-driven pages · Responsive layout · Content structured for search</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a
+                class="btn btn-primary"
+                href="https://www.enamelcraft.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Visit live site</a
+              >
+              <a class="btn btn-ghost" href="index.html#connect">Healthcare or local business sites</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-detail" id="prescription-generator">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Web app · Demo</p>
+          <time datetime="2024-11">Nov 2024</time>
+        </div>
+        <h2 class="project-detail-title">Prescription generator (PDF)</h2>
+        <div class="project-detail-grid">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Healthcare professional reviewing medical documentation"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              A <strong>portfolio-safe</strong> take on a prescription-style document builder:
+              prescriber and practice fields, patient demographics, and Rx sections exported with
+              jsPDF. It’s explicitly a demo, no PHI storage, no server, no branding baked in.
+            </p>
+            <p>
+              Useful for showing how I think about <strong>multi-section forms</strong>, validation,
+              and print/PDF output without coupling to a specific clinic’s identity.
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Privacy:</strong> everything stays in the browser session.</li>
+              <li><strong>UX:</strong> required fields, readable PDF hierarchy, accessible labels.</li>
+              <li><strong>Extensibility:</strong> easy to restyle or swap copy for another vertical.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>HTML, CSS · jsPDF · Static hosting only</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a
+                class="btn btn-primary"
+                href="prescription-generator.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open live preview</a
+              >
+              <a class="btn btn-ghost" href="index.html#connect">Custom document flows</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-detail" id="portfolio-site">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Static site · Portfolio</p>
+          <time datetime="2025-03">Mar 2025</time>
+        </div>
+        <h2 class="project-detail-title">This portfolio (fast static hosting)</h2>
+        <div class="project-detail-grid project-detail-grid--reverse">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Laptop screen showing code editor and website layout"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              The site you’re browsing: <strong>semantic HTML</strong>, a small set of global
+              styles, and progressive enhancement for navigation and footer niceties. It’s
+              built to survive static hosting, CDNs, and custom domains with almost no ops.
+            </p>
+            <p>
+              Sections cover the career arc, <strong>project highlights</strong>, blog and
+              podcast pointers, and contact, so recruiters and collaborators get answers without
+              hunting through PDFs.
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Performance:</strong> minimal JS, lazy media, system-friendly fonts.</li>
+              <li><strong>Maintainability:</strong> shared CSS tokens and predictable section layout.</li>
+              <li><strong>This page:</strong> deeper project narratives live here; home stays scannable.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>HTML, CSS, vanilla JS · JSON-LD for person/SEO · Deployed as static files</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a class="btn btn-primary" href="index.html#main" target="_blank" rel="noopener noreferrer"
+                >Open home (new tab)</a
+              >
+              <a class="btn btn-ghost" href="index.html#connect">Work with me</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-detail" id="mfin">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Web app · Finance · mFin</p>
+          <time datetime="2025-03">Mar 2025</time>
+        </div>
+        <h2 class="project-detail-title">mFin, personal finance planner</h2>
+        <div class="project-detail-grid">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Charts and analytics on a laptop for financial planning"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              A month-based planner for <strong>income, fixed and variable expenses</strong>, and
+              investments, with charts that break down where money goes. Data persists in
+              <code>localStorage</code> so it works as a personal dashboard with zero server.
+            </p>
+            <p>
+              The UI supports light/dark themes, guarded editing modes, and clear totals so you
+              can sanity-check a budget before the month starts, not after.
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Visualization:</strong> donut, category bars, and line-item breakdowns.</li>
+              <li><strong>Modeling:</strong> generic starter data; easy to adapt categories.</li>
+              <li><strong>Deployment:</strong> single HTML file, ideal for static hosting or local use.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>Vanilla JS · localStorage · SVG charts · INR formatting helpers</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a
+                class="btn btn-primary"
+                href="budgetplanner.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Open live preview</a
+              >
+              <a class="btn btn-ghost" href="index.html#connect">Product-style web tools</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>© <span id="year"></span> Madhusudan Dhakite · <a href="index.html">Home</a></p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

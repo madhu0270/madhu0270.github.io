@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Demo invoice builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sample invoice PDF builder for demos and portfolios.">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a222d;
+      --surface2: #232d3b;
+      --border: #2f3d4f;
+      --text: #e8edf4;
+      --muted: #8b9cb3;
+      --accent: #f5a623;
+      --accent-dim: #c77f0e;
+      --danger: #f87171;
+      --success: #4ade80;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .top-bar {
+      background: linear-gradient(135deg, var(--surface) 0%, #121a24 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 1.75rem 1.25rem 2rem;
+    }
+    .top-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    h1 {
+      font-family: Syne, sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      color: var(--muted);
+      max-width: 36rem;
+      font-size: 0.95rem;
+    }
+
+    .issuer-preview {
+      margin-top: 1.25rem;
+      padding: 1rem 1.15rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: rgba(232, 237, 244, 0.92);
+      max-width: 28rem;
+    }
+    .issuer-preview strong {
+      display: block;
+      font-family: Syne, sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .issuer-preview span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: -1rem auto 3rem;
+      padding: 0 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+    }
+    .panel--narrow { flex: 1 1 280px; max-width: 360px; }
+    .panel--wide { flex: 1 1 420px; min-width: min(100%, 520px); }
+
+    .panel h2 {
+      font-family: Syne, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 1rem;
+      color: var(--text);
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      font: inherit;
+    }
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .field small {
+      display: block;
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+    .data-table th,
+    .data-table td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.6rem;
+      text-align: left;
+    }
+    .data-table th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .data-table input[type="number"] {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      padding: 0.25rem 0;
+    }
+    .data-table input[type="number"]:focus { outline: none; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+      padding: 0.55rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn--ghost {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn--ghost:hover { background: #2a3545; }
+    .btn--danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 0.35rem 0.6rem;
+      font-size: 0.8rem;
+      margin-top: 0;
+    }
+    .btn--danger:hover { background: rgba(248,113,113,0.12); }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.25rem;
+      font-size: 0.9rem;
+    }
+    .summary-table th,
+    .summary-table td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
+    }
+    .summary-table thead th {
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .summary-table .row-total { background: rgba(245, 166, 35, 0.08); }
+    .summary-table .row-balance { background: rgba(245, 166, 35, 0.12); }
+    .text-end { text-align: right !important; }
+    .amt-neg { color: var(--danger); }
+    .amt-pos { color: var(--success); }
+
+    .note {
+      margin-top: 1rem;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .actions {
+      text-align: center;
+      padding: 0 1.25rem 3rem;
+    }
+    .btn--primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 1rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+    }
+    .btn--primary:hover { background: var(--accent-dim); }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Select2 dark theme tweaks */
+    .select2-container--default .select2-selection--single {
+      background: var(--surface2);
+      border-color: var(--border);
+      min-height: 38px;
+      border-radius: 8px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: var(--text);
+      line-height: 36px;
+      padding-left: 10px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+      border-color: var(--muted) transparent transparent transparent;
+    }
+    .select2-dropdown {
+      background: var(--surface2);
+      border-color: var(--border);
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+      background: var(--surface);
+      border-color: var(--border);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-inner">
+      <span class="badge">Portfolio demo</span>
+      <h1>Invoice builder</h1>
+      <p class="sub">Fill in sample customer details and line items, then download a PDF preview. This is a standalone UI experiment, not connected to any real business or backend.</p>
+      <div class="issuer-preview" aria-label="Demo issuer on PDF">
+        <strong>Northwind Demo Solutions Pvt. Ltd.</strong>
+        12 FC Road, Pune 411005, Maharashtra, India
+        <span>Phone +91 20 5555 0142 · billing@northwind-demo.example · GSTIN 27ABCDE1234F1Z5 (sample)</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel panel--narrow" aria-labelledby="details-heading">
+      <h2 id="details-heading">Customer</h2>
+      <div class="field">
+        <label for="refId">Invoice reference</label>
+        <input type="text" id="refId" value="INV-DEMO-001" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="customerName">Customer name</label>
+        <input type="text" id="customerName" placeholder="Acme Co." autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="contact">Phone or contact</label>
+        <input type="text" id="contact" placeholder="+1 555 0100" autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="email">Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+        <input type="email" id="email" placeholder="billing@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <input type="date" id="date">
+      </div>
+      <div class="field">
+        <label for="paymentMode">Payment method</label>
+        <select id="paymentMode">
+          <option value="">Select…</option>
+          <option value="Card">Card</option>
+          <option value="Bank transfer">Bank transfer</option>
+          <option value="Cash">Cash</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="amountPaid">Amount paid</label>
+        <input type="number" id="amountPaid" placeholder="0" min="0" step="0.01">
+        <small>Used to show balance due in the summary and PDF.</small>
+      </div>
+    </section>
+
+    <section class="panel panel--wide" aria-labelledby="lines-heading">
+      <h2 id="lines-heading">Line items</h2>
+      <p style="margin:0 0 1rem;color:var(--muted);font-size:0.9rem;">Add rows, pick a preset label or type via search, set amounts and optional discount %.</p>
+      <table class="data-table" id="treatmentsTable">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th style="width:110px">Amount</th>
+            <th style="width:100px">Discount %</th>
+            <th style="width:88px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <select class="treatment" style="width:100%">
+                <option value="">Select…</option>
+              </select>
+            </td>
+            <td><input type="number" class="cost" min="0" step="0.01" placeholder="0"></td>
+            <td><input type="number" class="discount" value="0" min="0" max="100" step="0.01" placeholder="0"></td>
+            <td><button type="button" class="btn btn--danger" onclick="removeRow(this)">Remove</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn btn--ghost" onclick="addRow()">+ Add line</button>
+
+      <h2 style="margin-top:1.75rem">Summary</h2>
+      <table class="summary-table" id="summaryTable">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="text-end">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Subtotal (before discount)</strong></td>
+            <td class="text-end" id="totalTreatmentAmount">0.00</td>
+          </tr>
+          <tr>
+            <td><strong>Total discount</strong></td>
+            <td class="text-end" id="totalDiscountAmount">0.00</td>
+          </tr>
+          <tr class="row-total">
+            <td><strong>Total due</strong></td>
+            <td class="text-end" id="totalAmountAfterDiscount"><strong>0.00</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Amount paid</strong></td>
+            <td class="text-end" id="amountPaidDisplay">0.00</td>
+          </tr>
+          <tr class="row-balance">
+            <td><strong>Balance</strong></td>
+            <td class="text-end" id="amountRemaining"><strong>0.00</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">Review numbers before exporting. Currency in the PDF is labeled generically for the demo.</div>
+    </section>
+  </main>
+
+  <div class="actions">
+    <button type="button" class="btn btn--primary" onclick="generatePDF()">Download PDF preview</button>
+  </div>
+
+  <footer>Sample tool for portfolio / UI demonstration only.</footer>
+
+  <script>
+    const LINE_ITEMS = [
+      'Consulting (hour)',
+      'Software license',
+      'Hosting (monthly)',
+      'Design review',
+      'Support package',
+      'Training session',
+      'Custom development',
+      'Setup fee',
+      'Retainer',
+      'Other / misc'
+    ];
+
+    function treatmentOptionsHtml() {
+      return LINE_ITEMS.map(t => `<option value="${t.replace(/"/g, '&quot;')}">${t.replace(/</g, '&lt;')}</option>`).join('');
+    }
+
+    function bindSelect2($el) {
+      if (typeof $ === 'undefined') return;
+      $el.select2({
+        placeholder: 'Search or pick item…',
+        allowClear: true,
+        width: '100%'
+      });
+    }
+
+    function addRow() {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>
+          <select class="treatment" style="width:100%">
+            <option value="">Select…</option>
+            ${treatmentOptionsHtml()}
+          </select>
+        </td>
+        <td><input type="number" class="cost" min="0" step="0.01" placeholder="0"></td>
+        <td><input type="number" class="discount" value="0" min="0" max="100" step="0.01" placeholder="0"></td>
+        <td><button type="button" class="btn btn--danger" onclick="removeRow(this)">Remove</button></td>
+      `;
+      document.querySelector('#treatmentsTable tbody').appendChild(row);
+      if (typeof $ !== 'undefined') bindSelect2($(row).find('.treatment'));
+      updateSummaryTable();
+    }
+
+    function removeRow(btn) {
+      const tr = btn.closest('tr');
+      if (document.querySelectorAll('#treatmentsTable tbody tr').length <= 1) {
+        tr.querySelector('.treatment').value = '';
+        tr.querySelector('.cost').value = '';
+        tr.querySelector('.discount').value = '0';
+        if (typeof $ !== 'undefined') $(tr).find('.treatment').trigger('change');
+        updateSummaryTable();
+        return;
+      }
+      if (typeof $ !== 'undefined') {
+        const $s = $(tr).find('.treatment');
+        if ($s.data('select2')) $s.select2('destroy');
+      }
+      tr.remove();
+      updateSummaryTable();
+    }
+
+    function calculateTotal() {
+      let total = 0;
+      let totalTreatmentAmount = 0;
+      let totalDiscount = 0;
+      let hasDiscount = false;
+      const treatments = [];
+
+      document.querySelectorAll('#treatmentsTable tbody tr').forEach(row => {
+        const treatmentSelect = row.querySelector('.treatment');
+        const costInput = row.querySelector('.cost');
+        const discountInput = row.querySelector('.discount');
+        if (!treatmentSelect || !costInput || !discountInput) return;
+
+        const t = treatmentSelect.value || '';
+        const c = parseFloat(costInput.value) || 0;
+        const d = parseFloat(discountInput.value) || 0;
+
+        if (c > 0) {
+          const discountAmount = (c * d) / 100;
+          const finalCost = c - discountAmount;
+          if (d > 0) hasDiscount = true;
+          totalTreatmentAmount += c;
+          total += finalCost;
+          totalDiscount += discountAmount;
+          treatments.push({ name: t, cost: c, discount: d, total: finalCost });
+        }
+      });
+
+      return { total, totalTreatmentAmount, totalDiscount, treatments, hasDiscount };
+    }
+
+    function updateSummaryTable() {
+      const { total, totalTreatmentAmount, totalDiscount } = calculateTotal();
+      const amountPaid = parseFloat(document.getElementById('amountPaid').value || 0);
+      const amountRemaining = total - amountPaid;
+
+      document.getElementById('totalTreatmentAmount').textContent = totalTreatmentAmount.toFixed(2);
+      document.getElementById('totalDiscountAmount').textContent = totalDiscount.toFixed(2);
+      document.getElementById('totalAmountAfterDiscount').innerHTML = `<strong>${total.toFixed(2)}</strong>`;
+      document.getElementById('amountPaidDisplay').textContent = amountPaid.toFixed(2);
+
+      const remainingCell = document.getElementById('amountRemaining');
+      if (amountRemaining > 0) {
+        remainingCell.innerHTML = `<strong class="amt-neg">${amountRemaining.toFixed(2)}</strong>`;
+      } else if (amountRemaining < 0) {
+        remainingCell.innerHTML = `<strong class="amt-pos">${Math.abs(amountRemaining).toFixed(2)} (credit)</strong>`;
+      } else {
+        remainingCell.innerHTML = `<strong class="amt-pos">0.00 (settled)</strong>`;
+      }
+    }
+
+    document.addEventListener('input', function (e) {
+      if (e.target && (e.target.classList.contains('cost') || e.target.classList.contains('discount') || e.target.id === 'amountPaid')) {
+        updateSummaryTable();
+      }
+    });
+    document.addEventListener('change', function (e) {
+      if (e.target && (e.target.classList.contains('cost') || e.target.classList.contains('discount') || e.target.id === 'amountPaid')) {
+        updateSummaryTable();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const firstSelect = document.querySelector('#treatmentsTable tbody tr .treatment');
+      if (firstSelect && !firstSelect.querySelector('option[value="Consulting (hour)"]')) {
+        firstSelect.innerHTML = '<option value="">Select…</option>' + treatmentOptionsHtml();
+      }
+
+      if (typeof $ !== 'undefined') {
+        bindSelect2($('.treatment'));
+        $(document).on('change', '.treatment', updateSummaryTable);
+      }
+
+      const d = document.getElementById('date');
+      if (d) d.valueAsDate = new Date();
+
+      updateSummaryTable();
+    });
+
+    async function generatePDF() {
+      const requiredFields = [
+        { id: 'refId', label: 'Invoice reference' },
+        { id: 'customerName', label: 'Customer name' },
+        { id: 'contact', label: 'Contact' },
+        { id: 'date', label: 'Date' }
+      ];
+
+      for (const field of requiredFields) {
+        const el = document.getElementById(field.id);
+        const value = (el && el.value || '').trim();
+        if (!value) {
+          alert(`Please fill in: ${field.label}.`);
+          el.focus();
+          return;
+        }
+      }
+
+      const contactValue = document.getElementById('contact').value.trim();
+      if (contactValue.length < 6) {
+        alert('Please enter a contact with at least 6 characters.');
+        document.getElementById('contact').focus();
+        return;
+      }
+
+      const treatmentRows = document.querySelectorAll('#treatmentsTable tbody tr');
+      let hasValidLine = false;
+      treatmentRows.forEach(row => {
+        const item = row.querySelector('.treatment').value;
+        const cost = parseFloat(row.querySelector('.cost').value || 0);
+        if (item && cost > 0) hasValidLine = true;
+      });
+      if (!hasValidLine) {
+        alert('Add at least one line item with a description and amount greater than zero.');
+        return;
+      }
+
+      for (const discountInput of document.querySelectorAll('.discount')) {
+        const discount = parseFloat(discountInput.value || 0);
+        if (discount < 0 || discount > 100) {
+          alert('Discount % must be between 0 and 100.');
+          discountInput.focus();
+          return;
+        }
+      }
+
+      const amountPaidValue = parseFloat(document.getElementById('amountPaid').value || 0);
+      if (amountPaidValue < 0) {
+        alert('Amount paid cannot be negative.');
+        document.getElementById('amountPaid').focus();
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const ISSUER = {
+        name: 'Northwind Demo Solutions Pvt. Ltd.',
+        line1: '12 FC Road, Pune 411005, Maharashtra, India',
+        line2: 'Phone +91 20 5555 0142 · billing@northwind-demo.example',
+        tax: 'GSTIN 27ABCDE1234F1Z5 (sample)'
+      };
+      const ACCENT = [245, 166, 35];
+      const ACCENT_DARK = [199, 127, 14];
+      const INK = [26, 34, 45];
+
+      const refId = document.getElementById('refId').value.trim();
+      const date = document.getElementById('date').value;
+      const customerName = document.getElementById('customerName').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const email = (document.getElementById('email').value || '').trim();
+      const paymentMode = document.getElementById('paymentMode').value;
+      const amountPaid = amountPaidValue;
+      const { total, totalDiscount, treatments, hasDiscount } = calculateTotal();
+
+      let y = 12;
+      doc.setFillColor(...ACCENT);
+      doc.rect(0, 0, 210, 4, 'F');
+      doc.setFillColor(248, 249, 252);
+      doc.rect(0, 4, 210, 38, 'F');
+      doc.setDrawColor(226, 230, 237);
+      doc.setLineWidth(0.25);
+      doc.line(14, 42, 196, 42);
+
+      const leftX = 14;
+      const rightX = 196;
+      y = 14;
+      doc.setTextColor(...INK);
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'bold');
+      doc.text(ISSUER.name, leftX, y);
+      y += 5.2;
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(8.5);
+      doc.setTextColor(80, 88, 102);
+      doc.text(ISSUER.line1, leftX, y);
+      y += 4.2;
+      doc.text(ISSUER.line2, leftX, y);
+      y += 4.2;
+      doc.text(ISSUER.tax, leftX, y);
+
+      doc.setTextColor(...ACCENT_DARK);
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.text('INVOICE', rightX, 22, { align: 'right' });
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(100, 108, 120);
+      doc.text('Preview only, not a legal or tax document.', rightX, 28, { align: 'right' });
+
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(220, 224, 232);
+      doc.roundedRect(128, 12, 68, 22, 1.5, 1.5, 'FD');
+      doc.setTextColor(...INK);
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'bold');
+      doc.text('Reference', 132, 18);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(9.5);
+      doc.text(refId, 132, 24);
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'bold');
+      doc.text('Date', 132, 30);
+      doc.setFont(undefined, 'normal');
+      doc.text(date, 150, 30);
+
+      y = 48;
+      doc.setTextColor(...INK);
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'bold');
+      doc.text('Bill to', leftX, y);
+      y += 5;
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'bold');
+      doc.text(customerName, leftX, y);
+      y += 5.5;
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(9.5);
+      doc.setTextColor(70, 78, 90);
+      doc.text('Contact: ' + contact, leftX, y);
+      y += 4.8;
+      if (email) {
+        doc.text('Email: ' + email, leftX, y);
+        y += 4.8;
+      }
+      doc.setTextColor(0, 0, 0);
+      y += 4;
+
+      doc.autoTable({
+        startY: y,
+        head: hasDiscount
+          ? [['Item', 'Amount', 'Disc. %', 'Line total']]
+          : [['Item', 'Amount', 'Line total']],
+        body: treatments.map(t =>
+          hasDiscount
+            ? [t.name || '-', t.cost.toFixed(2), `${t.discount.toFixed(2)}%`, t.total.toFixed(2)]
+            : [t.name || '-', t.cost.toFixed(2), t.total.toFixed(2)]
+        ),
+        theme: 'plain',
+        headStyles: {
+          fillColor: INK,
+          textColor: 255,
+          fontStyle: 'bold',
+          fontSize: 9,
+          cellPadding: { top: 3.5, bottom: 3.5, left: 4, right: 4 }
+        },
+        bodyStyles: {
+          fontSize: 10,
+          cellPadding: { top: 3, bottom: 3, left: 4, right: 4 },
+          textColor: INK
+        },
+        columnStyles: hasDiscount
+          ? { 1: { halign: 'right' }, 2: { halign: 'right' }, 3: { halign: 'right', fontStyle: 'bold' } }
+          : { 1: { halign: 'right' }, 2: { halign: 'right', fontStyle: 'bold' } },
+        alternateRowStyles: { fillColor: [252, 252, 254] },
+        margin: { left: 14, right: 14 },
+        tableLineColor: [220, 224, 232],
+        tableLineWidth: 0.15
+      });
+
+      y = doc.lastAutoTable.finalY + 8;
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...INK);
+      doc.text('Payment', 14, y);
+      y += 5;
+      doc.setFont(undefined, 'normal');
+      doc.autoTable({
+        startY: y,
+        head: [['Method', 'Paid']],
+        body: [[paymentMode || '-', amountPaid.toFixed(2)]],
+        theme: 'plain',
+        headStyles: {
+          fillColor: ACCENT,
+          textColor: 20,
+          fontStyle: 'bold',
+          fontSize: 9,
+          cellPadding: { top: 3, bottom: 3, left: 4, right: 4 }
+        },
+        bodyStyles: { fontSize: 10, cellPadding: 3 },
+        columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } },
+        margin: { left: 14, right: 120 },
+        tableLineColor: [220, 224, 232],
+        tableLineWidth: 0.15
+      });
+
+      y = doc.lastAutoTable.finalY + 10;
+      const right = 196;
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(...INK);
+      doc.text(`Total due: ${total.toFixed(2)}`, right, y, { align: 'right' });
+      y += 6;
+      if (hasDiscount) {
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(90, 98, 110);
+        doc.text(`Less discounts: ${totalDiscount.toFixed(2)}`, right, y, { align: 'right' });
+        y += 5.5;
+      }
+      doc.setFont(undefined, 'bold');
+      doc.setFontSize(11);
+      const bal = total - amountPaid;
+      if (bal > 0) doc.setTextColor(200, 65, 65);
+      else if (bal < 0) doc.setTextColor(34, 130, 80);
+      else doc.setTextColor(60, 68, 78);
+      doc.text(`Balance: ${bal.toFixed(2)}`, right, y, { align: 'right' });
+      doc.setTextColor(0, 0, 0);
+
+      doc.setFontSize(7.5);
+      doc.setTextColor(130, 136, 148);
+      doc.text('Northwind Demo Solutions · Generated by portfolio invoice builder · northwind-demo.example', 105, 287, { align: 'center' });
+
+      const safeName = customerName.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
+      doc.save(`${refId.replace(/\s+/g, '_')}_${safeName || 'invoice'}_demo.pdf`);
+    }
+  </script>
+</body>
+</html>

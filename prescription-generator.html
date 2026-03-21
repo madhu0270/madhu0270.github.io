@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Prescription generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a print-ready prescription PDF, portfolio demo.">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      --ink: #0c1222;
+      --ink-muted: #4a5568;
+      --paper: #f7f8fa;
+      --card: #ffffff;
+      --border: #e2e6ed;
+      --border-strong: #c5cdd8;
+      --accent: #0d6e6e;
+      --accent-hover: #0a5656;
+      --accent-soft: #e6f4f4;
+      --header-bg: linear-gradient(145deg, #0a3d3d 0%, #0d5555 48%, #0a4548 100%);
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(12, 18, 34, 0.08);
+      --shadow-lg: 0 20px 50px rgba(12, 18, 34, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .site-header {
+      background: var(--header-bg);
+      color: #f0faf9;
+      padding: 1.75rem 1.5rem 2rem;
+      box-shadow: 0 4px 30px rgba(10, 61, 61, 0.35);
+    }
+    .site-header-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .rx-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-text h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-weight: 700;
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+      margin: 0 0 0.2rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-text p {
+      margin: 0;
+      font-size: 0.875rem;
+      opacity: 0.88;
+      max-width: 22rem;
+    }
+    .clinic-preview {
+      margin-top: 0.85rem !important;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      max-width: 26rem !important;
+      line-height: 1.5;
+      font-size: 0.8rem !important;
+      opacity: 0.92 !important;
+    }
+    .clinic-preview strong {
+      display: block;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      opacity: 1;
+    }
+    .badge-demo {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      align-self: flex-start;
+    }
+
+    .prescriber-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240, 250, 249, 0.65);
+      margin: 0 0 0.85rem;
+    }
+
+    .doctor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem 1.25rem;
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+    .doctor-grid .field label {
+      color: rgba(240, 250, 249, 0.75);
+    }
+    .doctor-grid .field input,
+    .doctor-grid .field textarea {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+    .doctor-grid .field input::placeholder,
+    .doctor-grid .field textarea::placeholder {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    .doctor-grid .field input:focus,
+    .doctor-grid .field textarea:focus {
+      outline: 2px solid rgba(255, 255, 255, 0.45);
+      outline-offset: 1px;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    .field--full { grid-column: 1 / -1; }
+
+    main {
+      max-width: 1040px;
+      margin: -2rem auto 2.5rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    @media (max-width: 840px) {
+      main { grid-template-columns: 1fr; margin-top: -1.25rem; }
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.6rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .panel h2 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 1.1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .panel h2::before {
+      content: "";
+      width: 4px;
+      height: 1.1em;
+      border-radius: 2px;
+      background: var(--accent);
+      opacity: 0.85;
+    }
+
+    .field { margin-bottom: 1rem; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      margin-bottom: 0.35rem;
+    }
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field textarea { resize: vertical; min-height: 5rem; }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .note {
+      margin-top: 1.15rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(13, 110, 110, 0.15);
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    .actions {
+      max-width: 1040px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.95rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font: inherit;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(13, 110, 110, 0.35);
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    }
+    .btn:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 6px 20px rgba(13, 110, 110, 0.4);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn svg { flex-shrink: 0; opacity: 0.95; }
+
+    footer {
+      text-align: center;
+      padding: 1.25rem 1rem 2rem;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="header-top">
+        <div class="brand">
+          <div class="rx-mark" aria-hidden="true">℞</div>
+          <div class="brand-text">
+            <h1>Prescription generator</h1>
+            <p>Enter prescriber and patient details, then export a structured PDF for your records.</p>
+            <p class="clinic-preview" aria-label="Sample clinic on PDF">
+              <strong>Northwind Family Clinic</strong>
+              204 MG Road, Pune 411001 · +91 20 5555 0290 · Reg. clinic ID DEMO-NFC-2024 (sample)
+            </p>
+          </div>
+        </div>
+        <span class="badge-demo">Portfolio demo</span>
+      </div>
+
+      <p class="prescriber-label" id="doctor-heading">Prescriber &amp; practice</p>
+      <div class="doctor-grid" aria-labelledby="doctor-heading">
+        <div class="field">
+          <label for="doctorName">Doctor name</label>
+          <input type="text" id="doctorName" required autocomplete="name" placeholder="Dr. A. Kumar" value="Dr. Ananya Mehta">
+        </div>
+        <div class="field">
+          <label for="doctorQual">Qualification</label>
+          <input type="text" id="doctorQual" placeholder="e.g. MBBS, MD (General Medicine)" value="MBBS, MD (General Medicine)">
+        </div>
+        <div class="field">
+          <label for="doctorReg">Registration no.</label>
+          <input type="text" id="doctorReg" placeholder="Medical council / state reg. no." value="MH-MCI-78421 (sample)">
+        </div>
+        <div class="field">
+          <label for="practiceName">Practice / clinic name</label>
+          <input type="text" id="practiceName" required placeholder="Your clinic name" value="Northwind Family Clinic">
+        </div>
+        <div class="field">
+          <label for="practicePhone">Phone</label>
+          <input type="tel" id="practicePhone" autocomplete="tel" placeholder="+91 …" value="+91 20 5555 0290">
+        </div>
+        <div class="field field--full">
+          <label for="practiceAddress">Practice address</label>
+          <textarea id="practiceAddress" rows="2" placeholder="Street, city, PIN">204 MG Road, Pune 411001, Maharashtra</textarea>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" aria-labelledby="patient-heading">
+      <h2 id="patient-heading">Patient</h2>
+      <div class="field">
+        <label for="name">Patient name</label>
+        <input type="text" id="name" required autocomplete="name" placeholder="Full name">
+      </div>
+      <div class="field">
+        <label for="age">Age</label>
+        <input type="number" id="age" min="0" max="150" required placeholder="Years">
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <input type="date" id="date" required>
+      </div>
+      <div class="field">
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="">Select…</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="rx-heading">
+      <h2 id="rx-heading">Prescription</h2>
+      <div class="field">
+        <label for="primaryDiagnosis">Primary diagnosis</label>
+        <textarea id="primaryDiagnosis" rows="3" placeholder="Clinical findings / diagnosis"></textarea>
+      </div>
+      <div class="field">
+        <label for="prescription">Rx, medications &amp; instructions</label>
+        <textarea id="prescription" rows="6" placeholder="Drug name, strength, frequency, duration…"></textarea>
+      </div>
+      <div class="field">
+        <label for="advice">Advice</label>
+        <textarea id="advice" rows="3" placeholder="Diet, hygiene, precautions…"></textarea>
+      </div>
+      <div class="field">
+        <label for="labTests">Investigations / lab tests</label>
+        <textarea id="labTests" rows="2" placeholder="If any"></textarea>
+      </div>
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" rows="2" placeholder="Follow-up, referrals…"></textarea>
+      </div>
+      <div class="note">Preview only, verify all entries before use. Nothing is uploaded or stored.</div>
+    </section>
+  </main>
+
+  <div class="actions">
+    <button type="button" class="btn" onclick="generatePDF()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="18" x2="12" y2="12"/>
+        <line x1="9" y1="15" x2="15" y2="15"/>
+      </svg>
+      Generate prescription PDF
+    </button>
+  </div>
+
+  <footer>Demo tool, not a substitute for compliant medical documentation in your jurisdiction.</footer>
+
+  <script>
+    function addSectionBlock(doc, labelX, startY, title, bodyText, width) {
+      var y = startY;
+      if (!bodyText || !String(bodyText).trim()) return y;
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'bold');
+      doc.text(title + ':', labelX, y);
+      y += 6;
+      doc.setFont(undefined, 'normal');
+      var lines = doc.splitTextToSize(String(bodyText).trim(), width);
+      doc.text(lines, labelX, y);
+      return y + lines.length * 5 + 5;
+    }
+
+    function pdfTextBlock(doc, lines, labelX, startY, lineHeight) {
+      var y = startY;
+      lineHeight = lineHeight || 5;
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i]) doc.text(lines[i], labelX, y);
+        y += lineHeight;
+      }
+      return y;
+    }
+
+    function drawSectionTitlePdf(doc, x, y, title, teal) {
+      teal = teal || [13, 110, 110];
+      doc.setFillColor(teal[0], teal[1], teal[2]);
+      doc.rect(x, y - 4.5, 1.8, 6, 'F');
+      doc.setTextColor(26, 34, 45);
+      doc.setFontSize(11.5);
+      doc.setFont(undefined, 'bold');
+      doc.text(title, x + 4, y);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(0, 0, 0);
+      return y + 8;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var d = document.getElementById('date');
+      if (d) d.valueAsDate = new Date();
+    });
+
+    function generatePDF() {
+      var requiredPatient = [
+        { id: 'name', label: 'Patient name' },
+        { id: 'date', label: 'Date' },
+        { id: 'gender', label: 'Gender' },
+        { id: 'age', label: 'Age' }
+      ];
+      var requiredDoctor = [
+        { id: 'doctorName', label: 'Doctor name' },
+        { id: 'practiceName', label: 'Practice / clinic name' }
+      ];
+
+      var allReq = requiredPatient.concat(requiredDoctor);
+      for (var r = 0; r < allReq.length; r++) {
+        var f = allReq[r];
+        var el = document.getElementById(f.id);
+        var val = (el && el.value || '').trim();
+        if (!val) {
+          alert('Please fill in: ' + f.label + '.');
+          el.focus();
+          return;
+        }
+      }
+
+      var ageValue = parseInt(document.getElementById('age').value, 10);
+      if (isNaN(ageValue) || ageValue < 0 || ageValue > 150) {
+        alert('Please enter a valid age (0–150).');
+        document.getElementById('age').focus();
+        return;
+      }
+
+      var doctorName = document.getElementById('doctorName').value.trim();
+      var doctorQual = (document.getElementById('doctorQual').value || '').trim();
+      var doctorReg = (document.getElementById('doctorReg').value || '').trim();
+      var practiceName = document.getElementById('practiceName').value.trim();
+      var practicePhone = (document.getElementById('practicePhone').value || '').trim();
+      var practiceAddress = (document.getElementById('practiceAddress').value || '').trim();
+
+      var date = document.getElementById('date').value;
+      var name = document.getElementById('name').value.trim();
+      var gender = document.getElementById('gender').value;
+      var age = document.getElementById('age').value;
+      var primaryDiagnosis = document.getElementById('primaryDiagnosis').value;
+      var prescription = document.getElementById('prescription').value;
+      var advice = document.getElementById('advice').value;
+      var labTests = document.getElementById('labTests').value;
+      var notes = document.getElementById('notes').value;
+
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF();
+
+      var labelX = 14;
+      var valueX = 56;
+      var textW = 168;
+      var TEAL = [13, 110, 110];
+      var TEAL_SOFT = [234, 246, 246];
+      var INK = [26, 34, 45];
+      var MUTED = [95, 102, 114];
+
+      doc.setFillColor(TEAL[0], TEAL[1], TEAL[2]);
+      doc.rect(0, 0, 210, 3.5, 'F');
+      doc.setFillColor(TEAL_SOFT[0], TEAL_SOFT[1], TEAL_SOFT[2]);
+      doc.rect(0, 3.5, 210, 42, 'F');
+      doc.setDrawColor(200, 212, 212);
+      doc.setLineWidth(0.2);
+      doc.line(14, 45.5, 196, 45.5);
+
+      var y = 12;
+      doc.setDrawColor(TEAL[0], TEAL[1], TEAL[2]);
+      doc.setLineWidth(0.35);
+      doc.roundedRect(labelX, y - 2, 16, 14, 2, 2, 'S');
+      doc.setTextColor(TEAL[0], TEAL[1], TEAL[2]);
+      doc.setFontSize(13);
+      doc.setFont(undefined, 'bold');
+      doc.text('Rx', labelX + 3.2, y + 8.5);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+
+      var headLeft = 34;
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text(practiceName, headLeft, y + 3);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.text(doctorName + (doctorQual ? ' · ' + doctorQual : ''), headLeft, y + 8.5);
+      if (doctorReg) {
+        doc.text('Reg. ' + doctorReg, headLeft, y + 13.5);
+      }
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+
+      doc.setFontSize(17);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(TEAL[0], TEAL[1], TEAL[2]);
+      doc.text('PRESCRIPTION', 196, y + 5, { align: 'right' });
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.text('Draft, verify before issue', 196, y + 11, { align: 'right' });
+      doc.setTextColor(0, 0, 0);
+
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(195, 208, 208);
+      doc.roundedRect(118, y - 1, 78, 18, 2, 2, 'FD');
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.text('Clinic contact', 122, y + 4);
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      if (practicePhone) {
+        doc.text(practicePhone, 122, y + 9.5);
+      }
+      if (practiceAddress) {
+        var headAddr = doc.splitTextToSize(practiceAddress, 72);
+        var hy = y + (practicePhone ? 14 : 9);
+        for (var ha = 0; ha < Math.min(headAddr.length, 2); ha++) {
+          doc.text(headAddr[ha], 122, hy);
+          hy += 4;
+        }
+      }
+      doc.setTextColor(0, 0, 0);
+
+      y = 52;
+
+      doc.setFillColor(252, 253, 254);
+      doc.setDrawColor(220, 228, 230);
+      doc.roundedRect(labelX, y, 182, 40, 2, 2, 'FD');
+      y = drawSectionTitlePdf(doc, labelX + 4, y + 8, 'Patient', TEAL);
+
+      doc.setFontSize(10);
+      doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.setFont(undefined, 'bold');
+      doc.text('Name', labelX + 6, y);
+      doc.setFont(undefined, 'normal');
+      doc.text(name, valueX, y);
+      y += 5.5;
+      doc.setFont(undefined, 'bold');
+      doc.text('Age', labelX + 6, y);
+      doc.setFont(undefined, 'normal');
+      doc.text(String(age) + ' yrs', valueX, y);
+      y += 5.5;
+      doc.setFont(undefined, 'bold');
+      doc.text('Date', labelX + 6, y);
+      doc.setFont(undefined, 'normal');
+      doc.text(date, valueX, y);
+      y += 5.5;
+      doc.setFont(undefined, 'bold');
+      doc.text('Gender', labelX + 6, y);
+      doc.setFont(undefined, 'normal');
+      doc.text(gender, valueX, y);
+      doc.setTextColor(0, 0, 0);
+      y += 12;
+
+      var hasRx =
+        primaryDiagnosis.trim() ||
+        prescription.trim() ||
+        advice.trim() ||
+        labTests.trim() ||
+        notes.trim();
+
+      if (hasRx) {
+        y = drawSectionTitlePdf(doc, labelX, y, 'Clinical details', TEAL);
+        doc.setFontSize(10);
+        y = addSectionBlock(doc, labelX, y, 'Primary diagnosis', primaryDiagnosis, textW);
+        y = addSectionBlock(doc, labelX, y, 'Rx (medications & instructions)', prescription, textW);
+        y = addSectionBlock(doc, labelX, y, 'Advice', advice, textW);
+        y = addSectionBlock(doc, labelX, y, 'Investigations / lab tests', labTests, textW);
+        y = addSectionBlock(doc, labelX, y, 'Notes', notes, textW);
+      }
+
+      if (y > 258) {
+        doc.addPage();
+        y = 20;
+      }
+
+      doc.setDrawColor(TEAL[0], TEAL[1], TEAL[2]);
+      doc.setLineWidth(0.25);
+      doc.line(40, 275, 170, 275);
+      doc.setFontSize(8);
+      doc.setTextColor(MUTED[0], MUTED[1], MUTED[2]);
+      doc.text(practiceName + ' · Demo PDF, sign/stamp per your practice policy.', 105, 281, { align: 'center' });
+      doc.setTextColor(0, 0, 0);
+
+      var safe = name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
+      doc.save(safe + '_Prescription_' + date.replace(/\//g, '-') + '.pdf');
+    }
+  </script>
+</body>
+</html>
