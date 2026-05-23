@@ -101,6 +101,8 @@
     .q-grid-legend i.answered { background: #1e3a5f; border-color: var(--accent); }
     .q-grid-legend i.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
     .q-grid-legend i.current { outline: 2px solid var(--accent); }
+    .q-grid-legend i.wrong { background: #7f1d1d; border-color: var(--danger); }
+    .q-grid-legend i.correct-q { background: #14532d; border-color: var(--success); }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -180,6 +182,19 @@
     .option.selected { border-color: var(--accent); background: #1e3a5f; }
     .option.correct { border-color: var(--success); background: #14532d33; }
     .option.incorrect { border-color: var(--danger); background: #7f1d1d33; }
+    .option.chosen { box-shadow: inset 0 0 0 1px var(--accent); }
+    .option.correct.chosen { box-shadow: inset 0 0 0 1px var(--success); }
+    .option.incorrect.chosen { box-shadow: inset 0 0 0 1px var(--danger); }
+    .option.review-lock { cursor: default; pointer-events: none; }
+    .answer-tag {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.35rem;
+    }
+    .answer-tag.yours-correct { color: var(--success); }
+    .answer-tag.correct-key { color: var(--success); }
+    .answer-tag.wrong { color: var(--danger); }
     .option input { margin-top: 0.2rem; accent-color: var(--accent); }
     .option-label { font-weight: 700; min-width: 1.5rem; color: var(--accent); }
     .nav-row {
@@ -209,8 +224,41 @@
       font-variant-numeric: tabular-nums;
     }
     .q-grid button.answered { background: #1e3a5f; border-color: var(--accent); }
+    .q-grid button.wrong { background: #7f1d1d55; border-color: var(--danger); color: #fecaca; }
+    .q-grid button.correct-q { background: #14532d55; border-color: var(--success); color: #bbf7d0; }
     .q-grid button.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
     .q-grid button.current { outline: 2px solid var(--accent); }
+    .q-grid button.current.wrong { outline-color: #fca5a5; }
+    .wrong-answers-panel {
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+    .wrong-answers-panel h3 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--danger);
+    }
+    .wrong-answers-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      max-height: 6.5rem;
+      overflow-y: auto;
+    }
+    .wrong-answers-list button {
+      min-width: 2rem;
+      padding: 0.35rem 0.45rem;
+      border: 1px solid var(--danger);
+      background: #7f1d1d55;
+      color: #fecaca;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .wrong-answers-list button.current { outline: 2px solid #fca5a5; }
     .results-hero {
       text-align: center;
       padding: 2rem 1rem;
@@ -518,13 +566,23 @@
       </div>
       <aside class="exam-sidebar" aria-label="Question list">
         <h2>Questions</h2>
-        <div class="q-grid-legend">
+        <div class="q-grid-legend" id="qGridLegend">
           <span><i></i> Unanswered</span>
           <span><i class="answered"></i> Answered</span>
           <span><i class="flagged"></i> Flagged</span>
           <span><i class="current"></i> Current</span>
         </div>
+        <div class="q-grid-legend" id="reviewGridLegend" hidden>
+          <span><i class="wrong"></i> Incorrect</span>
+          <span><i class="correct-q"></i> Correct</span>
+          <span><i class="flagged"></i> Flagged</span>
+          <span><i class="current"></i> Current</span>
+        </div>
         <div class="q-grid" id="qGrid"></div>
+        <div class="wrong-answers-panel" id="wrongAnswersPanel" hidden>
+          <h3 id="wrongAnswersTitle">Incorrect answers</h3>
+          <div class="wrong-answers-list" id="wrongAnswersList"></div>
+        </div>
       </aside>
     </section>
 
@@ -1074,6 +1132,32 @@
       return s;
     }
 
+    function getChosenIndex(qId) {
+      const a = state.answers[qId];
+      if (a === undefined || a === null) return undefined;
+      const n = Number(a);
+      return Number.isNaN(n) ? undefined : n;
+    }
+
+    function getQuestionOutcome(q) {
+      const chosen = getChosenIndex(q.id);
+      if (chosen === undefined) return "unanswered";
+      return chosen === q.correct ? "correct" : "wrong";
+    }
+
+    function reviewAnswerTags(chosenIndex, optionIndex, correctIndex) {
+      if (chosenIndex === optionIndex && optionIndex === correctIndex) {
+        return '<span class="answer-tag yours-correct">Your answer (correct)</span>';
+      }
+      if (chosenIndex === optionIndex) {
+        return '<span class="answer-tag wrong">Your answer</span>';
+      }
+      if (optionIndex === correctIndex) {
+        return '<span class="answer-tag correct-key">Correct answer</span>';
+      }
+      return "";
+    }
+
     function renderQuestion() {
       const qs = getActiveQuestions();
       const q = qs[state.current];
@@ -1082,21 +1166,26 @@
       const list = $("options");
       list.innerHTML = "";
       const letters = ["A", "B", "C", "D"];
+      const reviewing = state.submitted || state.reviewMode;
+      const chosenIndex = getChosenIndex(q.id);
       q.options.forEach((opt, i) => {
         const li = document.createElement("li");
         li.className = "option";
-        const selected = state.answers[q.id] === i;
-        if (selected) li.classList.add("selected");
-        if (state.submitted || state.reviewMode) {
+        const selected = chosenIndex === i;
+        if (selected && !reviewing) li.classList.add("selected");
+        if (reviewing) {
+          li.classList.add("review-lock");
           if (i === q.correct) li.classList.add("correct");
-          else if (selected) li.classList.add("incorrect");
+          if (selected) li.classList.add("chosen");
+          if (selected && i !== q.correct) li.classList.add("incorrect");
         }
+        const tags = reviewing ? reviewAnswerTags(chosenIndex, i, q.correct) : "";
         li.innerHTML = `
-          <input type="radio" name="q" id="opt${i}" ${selected ? "checked" : ""} ${state.submitted ? "disabled" : ""} />
+          <input type="radio" name="q" id="opt${i}" ${selected ? "checked" : ""} ${reviewing ? "disabled" : ""} tabindex="-1" />
           <span class="option-label">${letters[i]}.</span>
-          <span>${escapeHtml(formatOption(opt, i))}</span>
+          <span>${escapeHtml(formatOption(opt, i))}${tags}</span>
         `;
-        if (!state.submitted) {
+        if (!reviewing) {
           li.addEventListener("click", () => selectAnswer(i));
         }
         list.appendChild(li);
@@ -1135,11 +1224,20 @@
     function renderGrid() {
       const grid = $("qGrid");
       grid.innerHTML = "";
+      const reviewing = state.submitted || state.reviewMode;
+      $("qGridLegend").hidden = reviewing;
+      $("reviewGridLegend").hidden = !reviewing;
       getActiveQuestions().forEach((q, idx) => {
         const b = document.createElement("button");
         b.textContent = q.id;
         b.type = "button";
-        if (state.answers[q.id] !== undefined) b.classList.add("answered");
+        if (reviewing) {
+          const outcome = getQuestionOutcome(q);
+          if (outcome === "wrong") b.classList.add("wrong");
+          else if (outcome === "correct") b.classList.add("correct-q");
+        } else if (state.answers[q.id] !== undefined) {
+          b.classList.add("answered");
+        }
         if (state.flags[q.id]) b.classList.add("flagged");
         if (idx === state.current) b.classList.add("current");
         b.addEventListener("click", () => {
@@ -1153,6 +1251,39 @@
       if (currentBtn) {
         currentBtn.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
+      renderWrongAnswersPanel();
+    }
+
+    function renderWrongAnswersPanel() {
+      const panel = $("wrongAnswersPanel");
+      const list = $("wrongAnswersList");
+      const reviewing = state.submitted || state.reviewMode;
+      if (!reviewing) {
+        panel.hidden = true;
+        return;
+      }
+      const wrongItems = getActiveQuestions()
+        .map((q, idx) => ({ q, idx }))
+        .filter(({ q }) => getQuestionOutcome(q) === "wrong");
+      if (wrongItems.length === 0) {
+        panel.hidden = true;
+        return;
+      }
+      panel.hidden = false;
+      $("wrongAnswersTitle").textContent = `Incorrect answers (${wrongItems.length})`;
+      list.innerHTML = "";
+      wrongItems.forEach(({ q, idx }) => {
+        const b = document.createElement("button");
+        b.textContent = q.id;
+        b.type = "button";
+        if (idx === state.current) b.classList.add("current");
+        b.addEventListener("click", () => {
+          state.current = idx;
+          saveState();
+          renderQuestion();
+        });
+        list.appendChild(b);
+      });
     }
 
     function submitExam(force = false) {
@@ -1198,9 +1329,9 @@
       const wrongItems = [];
       const qs = getActiveQuestions();
       qs.forEach((q) => {
-        const a = state.answers[q.id];
-        if (a === q.correct) correct++;
-        else wrongItems.push({ q, chosen: a });
+        const chosen = getChosenIndex(q.id);
+        if (chosen === q.correct) correct++;
+        else wrongItems.push({ q, chosen });
       });
       const unanswered = qs.length - answeredCount();
       const pct = Math.round((correct / qs.length) * 100);
