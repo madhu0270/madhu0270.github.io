@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PMP Mock Exam — 150 PMBOK 7 Scenario Questions</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --surface2: #243044;
+      --text: #e8eef4;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 { font-size: 1.15rem; font-weight: 600; }
+    header p { font-size: 0.8rem; color: var(--muted); }
+    .header-stats { display: flex; gap: 1.25rem; font-size: 0.9rem; }
+    .header-stats span { color: var(--muted); }
+    .header-stats strong { color: var(--text); }
+    main { padding: 1.5rem; }
+    #welcome.screen.active,
+    #results.screen.active {
+      display: block;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    #exam.screen.active {
+      display: flex;
+      gap: 1.25rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      align-items: flex-start;
+    }
+    .exam-main { flex: 1; min-width: 0; }
+    .exam-sidebar {
+      width: 272px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      position: sticky;
+      top: 5.5rem;
+      max-height: calc(100vh - 6.5rem);
+      display: flex;
+      flex-direction: column;
+    }
+    .exam-sidebar h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .q-grid-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.75rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .q-grid-legend span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .q-grid-legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+    }
+    .q-grid-legend i.answered { background: #1e3a5f; border-color: var(--accent); }
+    .q-grid-legend i.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
+    .q-grid-legend i.current { outline: 2px solid var(--accent); }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .welcome h2 { margin-bottom: 0.75rem; font-size: 1.4rem; }
+    .welcome ul { margin: 1rem 0 1.5rem 1.25rem; color: var(--muted); }
+    .welcome li { margin-bottom: 0.35rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: #2d3d52; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .progress-bar {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+    .progress-bar div {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.2s;
+    }
+    .q-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .q-meta .flag-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .q-meta .flag-btn.flagged { border-color: var(--warning); color: var(--warning); }
+    .q-text {
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.65;
+    }
+    .options { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.9rem 1rem;
+      background: var(--surface2);
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .option:hover { border-color: var(--border); }
+    .option.selected { border-color: var(--accent); background: #1e3a5f; }
+    .option.correct { border-color: var(--success); background: #14532d33; }
+    .option.incorrect { border-color: var(--danger); background: #7f1d1d33; }
+    .option input { margin-top: 0.2rem; accent-color: var(--accent); }
+    .option-label { font-weight: 700; min-width: 1.5rem; color: var(--accent); }
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .q-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.35rem;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+      padding-right: 0.15rem;
+    }
+    .q-grid button {
+      padding: 0.4rem 0.2rem;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .q-grid button.answered { background: #1e3a5f; border-color: var(--accent); }
+    .q-grid button.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
+    .q-grid button.current { outline: 2px solid var(--accent); }
+    .results-hero {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .results-hero.pass { background: #14532d44; border: 1px solid var(--success); }
+    .results-hero.fail { background: #7f1d1d44; border: 1px solid var(--danger); }
+    .results-hero h2 { font-size: 2rem; margin-bottom: 0.25rem; }
+    .results-hero .pct { font-size: 3rem; font-weight: 700; }
+    .results-hero.pass .pct { color: var(--success); }
+    .results-hero.fail .pct { color: var(--danger); }
+    .results-detail {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .results-detail div {
+      background: var(--surface2);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    .results-detail strong { display: block; font-size: 1.5rem; }
+    .review-list { max-height: 65vh; overflow-y: auto; }
+    .review-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .review-item:last-child { border-bottom: none; }
+    .review-item .wrong { color: var(--danger); }
+    .review-item .explanation {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface2);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .review-item .explanation strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .review-item .video-link {
+      margin-top: 0.75rem;
+    }
+    .review-item .video-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .review-item .video-link a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+    .timer { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .timer.warning { color: var(--warning); }
+    .timer.critical { color: var(--danger); }
+    .break-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 20, 25, 0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .break-overlay.active { display: flex; }
+    .break-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      max-width: 420px;
+      width: 100%;
+    }
+    .break-modal h3 { margin-bottom: 0.5rem; font-size: 1.15rem; }
+    .break-modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .break-timer {
+      font-size: 2rem;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      text-align: center;
+      margin: 1rem 0 1.25rem;
+      color: var(--accent);
+    }
+    .break-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .password-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 20, 25, 0.9);
+      z-index: 110;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .password-overlay.active { display: flex; }
+    .password-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    .password-modal h3 { margin-bottom: 0.5rem; font-size: 1.15rem; }
+    .password-modal p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .password-modal input {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .password-modal input:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+    .password-error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-badge {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+    .paused-status {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .paused-status strong { color: var(--warning); }
+    .exam-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .save-status {
+      font-size: 0.8rem;
+      color: var(--success);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .save-status.visible { opacity: 1; }
+    .welcome-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      #exam.screen.active { flex-direction: column; }
+      .exam-sidebar {
+        width: 100%;
+        position: static;
+        max-height: 220px;
+      }
+    }
+    @media (max-width: 600px) {
+      .results-detail { grid-template-columns: 1fr; }
+      .q-grid { grid-template-columns: repeat(8, 1fr); }
+    }
+    .site-footer {
+      text-align: center;
+      padding: 1.25rem 1.5rem 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: 0.5rem;
+    }
+    .site-footer p { margin: 0; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>PMP Mock Exam(David McLachlan)</h1>
+      <p>150 PMBOK 7 Scenario Questions · David McLachlan · Pass: 70%</p>
+    </div>
+    <div class="header-stats" id="headerStats" hidden>
+      <span>Answered: <strong id="answeredCount">0</strong>/150</span>
+      <span>Time remaining: <strong class="timer" id="timer">03:11:40</strong></span>
+      <span id="sectionBadge" class="section-badge" hidden>Section 1 of 3</span>
+      <span id="saveStatus" class="save-status" hidden aria-live="polite">Saved</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="welcome" class="screen active">
+      <div class="card welcome">
+        <h2>Full-length practice exam</h2>
+        <ul>
+          <li><strong>150</strong> scenario-based multiple-choice questions (scaled from the official 180)</li>
+          <li><strong>3h 11m 40s</strong> total time — proportional to the official PMP <strong>3h 50m</strong> for 180 questions (230 × 150÷180 min)</li>
+          <li><strong>3 sections</strong> of ~50 questions each (official exam uses 60 per section)</li>
+          <li><strong>2 optional 10-minute breaks</strong> — offered after question 50 and again after question 100 (exam timer pauses during a break)</li>
+          <li><strong>70%</strong> (105+ correct) required to pass — same guidance as the source video</li>
+          <li>Navigate freely; flag questions for review; countdown auto-submits when time runs out</li>
+          <li>Submit when ready to see your score and review misses</li>
+          <li>Each answer <strong>auto-saves</strong> to this browser (localStorage)</li>
+          <li><strong>Pause &amp; save</strong> stops the countdown and returns you here; resume when ready</li>
+        </ul>
+        <p id="pausedStatus" class="paused-status" hidden></p>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem;">
+          Source: <a href="https://youtu.be/Zht0-j03NfQ" style="color:var(--accent);" target="_blank" rel="noopener">150 PMBOK 7 Scenario-Based PMP Questions</a> (for personal study).
+        </p>
+        <div class="welcome-actions">
+          <button class="btn btn-primary" id="startBtn">Start exam</button>
+          <button class="btn btn-secondary" id="resumeBtn" style="display:none;">Resume</button>
+          <button class="btn btn-secondary" id="resetProgressBtn" style="display:none;">Reset progress</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="exam" class="screen">
+      <div class="exam-main">
+        <div class="progress-bar"><div id="progressFill" style="width:0%"></div></div>
+        <div class="card">
+          <div class="q-meta">
+            <span>Question <strong id="qNum">1</strong> of 150</span>
+            <button type="button" class="flag-btn" id="flagBtn">Flag for review</button>
+          </div>
+          <p class="q-text" id="qText"></p>
+          <ul class="options" id="options"></ul>
+          <div class="nav-row">
+            <button class="btn btn-secondary" id="prevBtn">Previous</button>
+            <button class="btn btn-secondary" id="nextBtn">Next</button>
+          </div>
+          <div class="nav-row exam-actions" style="margin-top:1rem;">
+            <button class="btn btn-secondary" id="pauseBtn" type="button">Pause &amp; save</button>
+            <button class="btn btn-secondary" id="backToResultsBtn" type="button" hidden>Back to results</button>
+            <button class="btn btn-secondary" id="resetExamBtn" type="button">Reset exam</button>
+            <button class="btn btn-danger" id="submitBtn" type="button">Submit exam</button>
+          </div>
+        </div>
+      </div>
+      <aside class="exam-sidebar" aria-label="Question list">
+        <h2>Questions</h2>
+        <div class="q-grid-legend">
+          <span><i></i> Unanswered</span>
+          <span><i class="answered"></i> Answered</span>
+          <span><i class="flagged"></i> Flagged</span>
+          <span><i class="current"></i> Current</span>
+        </div>
+        <div class="q-grid" id="qGrid"></div>
+      </aside>
+    </section>
+
+    <section id="results" class="screen">
+      <div class="card">
+        <div class="results-hero" id="resultsHero">
+          <p class="pct" id="scorePct">0%</p>
+          <h2 id="passFail">—</h2>
+          <p id="passMsg" style="color:var(--muted);margin-top:0.5rem;"></p>
+        </div>
+        <div class="results-detail">
+          <div><strong id="correctCount">0</strong><span style="color:var(--muted);font-size:0.85rem;">Correct</span></div>
+          <div><strong id="wrongCount">0</strong><span style="color:var(--muted);font-size:0.85rem;">Incorrect</span></div>
+          <div><strong id="unansweredCount">0</strong><span style="color:var(--muted);font-size:0.85rem;">Unanswered</span></div>
+        </div>
+        <h3 style="margin-bottom:0.75rem;font-size:1rem;">Review incorrect answers — open video at question timestamp</h3>
+        <div class="review-list" id="reviewList"></div>
+        <div class="nav-row" style="margin-top:1.5rem;">
+          <button class="btn btn-primary" id="retryBtn">Retake exam</button>
+          <button class="btn btn-secondary" id="reviewExamBtn">Review in exam mode</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; Developed by Madhusudan Dhakite</p>
+  </footer>
+
+  <div class="password-overlay" id="passwordOverlay" role="dialog" aria-modal="true" aria-labelledby="passwordTitle">
+    <div class="password-modal">
+      <h3 id="passwordTitle">Exam password required</h3>
+      <p>Enter the password to start the exam.</p>
+      <input type="password" id="examPasswordInput" autocomplete="current-password" placeholder="Password" />
+      <p id="passwordError" class="password-error" hidden>Incorrect password. Try again.</p>
+      <div class="break-actions">
+        <button type="button" class="btn btn-primary" id="passwordSubmitBtn">Continue</button>
+        <button type="button" class="btn btn-secondary" id="passwordCancelBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="break-overlay" id="breakOverlay" role="dialog" aria-modal="true" aria-labelledby="breakTitle">
+    <div class="break-modal">
+      <h3 id="breakTitle">Optional break</h3>
+      <p id="breakDesc">You have finished a section. On the real PMP exam you may take an optional 10-minute break. The exam countdown is paused while you are on break.</p>
+      <p class="break-timer" id="breakTimer">10:00</p>
+      <div class="break-actions">
+        <button type="button" class="btn btn-primary" id="startBreakBtn">Take 10-minute break</button>
+        <button type="button" class="btn btn-secondary" id="skipBreakBtn">Continue exam</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PASS_THRESHOLD = 70;
+    const QUESTIONS = [{"id": 1, "text": "You have been assigned to a new project where the work is behind schedule and the team are not working together well. The team is relatively new and conflicts are arising. Team members are blaming each other for the work not done, and some people are not showing up to work on the project at all. What will you do next?", "options": ["Meet with the functional manager of that area to agree on team members' time requirements", "Meet with your team to set a team charter and define roles and responsibilities", "Meet with the project sponsor to gain additional funding for resources who can work together", "Escalate the issue to the steering committee as soon as possible as a project risk"], "correct": 1, "explanation": "Create a collaborative team environment (team agreements, roles and responsibilities, standing meetings). PMBOK 7th ed., pp. 28–29 — Creating a collaborative team environment."}, {"id": 2, "text": "You have recently completed a project for a new product and have been asked to manage it after its release to keep it relevant in today's marketplace. Half of your existing team are rolling off to other projects. What will you do next?", "options": ["Create a business case and a project charter for your project sponsor to approve", "Retain as many of your current project staff to continue work on the product", "Raise a change request for your current project and add scope and continue making changes", "Secure funding for a stable team, then use current resources to form a suite of projects to improve the product"], "correct": 3, "explanation": "Product management integrates people, data, processes, and business systems throughout the product life cycle. PMBOK 7th ed., pp. 17–19 — Product management considerations."}, {"id": 3, "text": "You're delivering a critical change and several key stakeholders in your organization have added seemingly unnecessary steps for you to take, with extra approvals, reports, and meetings. They're also restricting the people you need from working on your project in a larger capacity. What will you do next?", "options": ["Go directly to the people you need to avoid extra back and forth with the stakeholders", "Raise a risk in the risk register on the lack of access to sufficient resources", "Communicate more often with the stakeholders and gain a deeper awareness of their ideas and situation", "Show your stakeholders the resource assignment matrix and project roles and responsibilities"], "correct": 2, "explanation": "Effectively engaging with stakeholders — communication and awareness of their ideas through knowledge sharing and regular meetings may help. PMBOK 7th ed., pp. 32–33."}, {"id": 4, "text": "You're managing a project team made up mostly of men. Recently Jane was hired for her high expertise in the brands that make up your industry. You notice she has been left out of some key meetings and others are overlooking her opinions. You also notice she is paid significantly less than her male colleagues. What will you do next?", "options": ["Make steps to update her pay to the same range as the others on your project and ask her opinion and advice specifically during each meeting", "Take the lower pay as a win for your project as it will help keep costs low", "Ask Jane to write down her knowledge of the industry just in case she leaves", "No need to rock the boat — this is just how people work in this industry"], "correct": 0, "explanation": "Integrity and stewardship — respectful engagement including compensation, access to opportunity, and fair treatment. PMBOK 7th ed., p. 25 — Be a diligent, respectful, and caring steward."}, {"id": 5, "text": "During one of your work group meetings, a stakeholder raises the concern that the product you're working on will be discontinued in the next five months. You are not aware of this, and your project budget has already been approved until all the scheduled delivery, which is in five months. What will you do next?", "options": ["Keep the project going as it is — the discontinued product isn't your responsibility", "Set a meeting with your project sponsor to share the information and a recommendation to terminate the project", "Change the scope of the project to meet a different product so your project can remain relevant", "Ask for additional funding to see if you can improve the product instead of discontinuing it"], "correct": 1, "explanation": "Delivering value — if the project is no longer aligned with the business need or unlikely to provide value, the organization may choose to terminate the effort. PMBOK 7th ed., p. 35 — Focus on value."}, {"id": 6, "text": "You've collected the requirements for your project and you're creating a scope statement and WBS. During this process you notice some functionality in your database system that will help a different project that you're aware of in your PMO. What will you do next?", "options": ["Place the feature in the other project's backlog and ask them to prioritize it as soon as possible", "Raise the functionality in your risk register as a threat with the response to mitigate", "Add the scope to your project and complete it as soon as possible", "Raise the functionality in your risk register as an opportunity with the response to exploit, and meet with the other project's team and sponsor to discuss"], "correct": 3, "explanation": "Systems thinking — make a previously unknown opportunity known and exploit it. PMBOK 7th ed., p. 39 — Respond to system interactions; p. 129 — Opportunities."}, {"id": 7, "text": "You're working on a higher-profile project. Several high-ranking senior executives want to take credit for this initiative while limiting the impact to their own resources. This has led to several conflicts and a scope statement that is unclear, leading to a risk of project failure. What will you do next?", "options": ["Create a scope statement yourself to avoid further conflict", "Facilitate a discussion with the executives as a neutral third party, focusing on agreed project goals", "Limit your project resources to the executives until they can agree on a way forward", "Escalate the issue to the project steering committee and ask them to resolve the problem"], "correct": 1, "explanation": "Leadership — neutral facilitation helps more than detailed recommendations when senior managers conflict over priorities. PMBOK 7th ed., p. 42 — Demonstrate leadership behaviors."}, {"id": 8, "text": "You're managing a project where the majority of the product has been planned up front, but an external system is needed from a vendor in partial pieces where the requirements are unclear. Half of your stakeholders want waterfall and the other half advocate for agile. What will you do next?", "options": ["Use an agile methodology — the fixed scope is low risk and you can capture changes using agile", "Use a waterfall methodology and ask the team to plan the uncertain scope better", "Proceed with a hybrid method to start with pre-planned scope but agile ceremonies that promote feedback", "Use a combination of waterfall and agile to capture all requirements and keep stakeholders happy"], "correct": 2, "explanation": "Tailoring — adapt methods to the unique project context; this project requires a hybrid of waterfall and agile. PMBOK 7th ed., pp. 44–46 — Tailoring."}, {"id": 9, "text": "You're working on a project where senior users have been testing the product as parts are released. They have found missing requirements and defects. Their manager is worried the project won't deliver a product fit for purpose without defects within the needed timeframe. What will you do next?", "options": ["Perform some of the testing yourself to ensure a quality product", "Help every team member focus on quality from correct acceptance criteria to a developed and tested product", "Limit testing until the very end of the project so you can do it all in one go", "Increase testing on your project and add more testing resources so no defect goes unnoticed"], "correct": 1, "explanation": "Quality is everyone's responsibility in an adaptive/agile project. PMBOK 7th ed., pp. 47–49 — Build quality into processes and deliverables."}, {"id": 10, "text": "You are working through the risk assessment with your team, who are having trouble coming up with ideas for risks. You decide to give them guidance on types of complexity that might affect your new product. What will you do next?", "options": ["Ask them to brainstorm qualitative and quantitative risks", "Ask them to perform the five whys and Ishikawa analysis to find root causes", "Ask them to brainstorm around possible unwanted human behavior, system behavior, ambiguity, and technical innovation impacts", "Ask them to perform a retrospective on uncertainty to discover what isn't working well"], "correct": 2, "explanation": "Navigate complexity — complexity from human behavior, system interactions, technical innovation, uncertainty, and ambiguity (VUCA). PMBOK 7th ed., pp. 50–51."}, {"id": 11, "text": "You're working on a you can do it you're working on a you can do it you're working on a project where you discover a certain negative risk with a potential impact of $2 million okay negative risk impact $2 million okay negative risk impact $2 million okay negative risk impact that's good to know you meet with your that's good to know you meet with your that's good to know you meet with your project stakeholders who determine that this is within their risk appetite provided that you meet a risk threshold of 10% h interesting what will you do of 10% h interesting what will you do of 10% h interesting. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 1}, {"id": 12, "text": "Before in a building project so that actually could be even more risky maybe so we've got a risk more risky maybe so we've got a risk more risky maybe so we've got a risk around insufficient building materials but now we're suggesting a brand new but now we're suggesting a brand new but now we're suggesting a brand new material that hasn't really been tested material that hasn't really been tested material that hasn't really been tested yet half of your stakeholder group are happy with this risk response but the other half are not and refuse to sign off on it. What will you do next?", "options": ["Proceed so what other options do we have here", "Suggest they proceed with the proposed risk response and", "Proceed with the proposed risk response and", "Option D"], "correct": 3}, {"id": 13, "text": "If you wanted to check that out for yourself you know what this will happen all the time in the real world sometimes we need to come in here and help manage it that's why in here and help manage it that's why in here and help manage it that's why they need us to help get cl clarity on that scope and the requirements and you know we need to gather that from our stakeholders at a significant cost you managed to reign in these issues okay however your project management office would like you to brainstorm ways to improve with your team so that uh it does not happen again that makes sense what will you do next so we're what will you do next so we're. What will you do next?", "options": ["Ask your team to change the project model methodology from waterfall to agile and you know what this will happen in the real world as well people will say okay we just need to", "Change the project model methodology from waterfall to agile and you know what this will happen in the real world as well people will say okay we just need to", "Ask your team to check their work twice before sending it to the next part of the process i think you know that could be one option but c is definitely a far better option with you know better things in there as well and more and better things so all round i like that one better", "Option D"], "correct": 2}, {"id": 14, "text": "Before and this is around that engagement communication engagement i think let's see what we've got think let's see what we've got think let's see what we've got uh oh and i can already see communicate here which is this could be you know the one that we're looking for already one that we're looking for already one that we're looking for already communicate the vision and benefits for the change clearly along with the impact to their work so communicating more communication will definitely help uh and also listening very clearly to what they need uh so communication goes both ways so that's a definitely a high maybe ways so that's a definitely a high maybe ways so that's a definitely a high maybe for now let's see what else we have for now let's see what else we have for now let's see what else we have create an impact over influence chart to determine who should be engaged appropriately uh i mean that's appropriately uh i mean that's appropriately uh i mean that's definitely also a good thing but then it's not going to help with the missing it's not going to help with the missing it's not going to help with the missing key meetings or you know people questioning the changes i think we need to communicate those things first so still a for me escalate the matter to your project sponsor and arrange for different stakeholders again you know sometimes sometimes we can but often we can't just replace our stakeholders can't just replace our stakeholders can't just replace our stake", "options": ["Create a web page using what we've got", "Create a web page using sharepoint with all the project information that your stakeholders can see that's pull information push more see that's pull information push more see that's pull information push more funding for your project on your project and", "Communicate it to our project sponsor either so let's put a no for that one either so let's put a no for that one either so let's put a no for that one for now push your stakeholders to", "Option D"], "correct": 0}, {"id": 15, "text": "On a project with a vendor where scope and requirements have been missed okay you notice that miscommunication iation and mixed messages are common you set a meeting with your team and the vendor team the meeting is extremely important to get right. What will you do next?", "options": ["Help them to as if that's going to", "Confirm they hear your message oh this is good", "Confirm they hear your message determine if they agree so we get that feedback loop are they are they hearing a message are they agreeing and", "Option D"], "correct": 1}, {"id": 16, "text": "If they agree and identifying any nuances or additions to the message that they have may have added or heard themselves page 13 stakeholder engagement engage in the perot guid seventh edition uh so that's perot guid seventh edition uh so that's perot guid seventh edition uh so that's really really good how did you guys go for that one some really good tips in there as well so really really good for your own pmp exam and also we're down to your own pmp exam and also we're down to your own pmp exam and also we're down to the last three questions in this section you're doing really really great keep you're doing really really great keep you're doing really really great keep going guys your stakeholders seem to be engaged engaged engaged however there are frequent changes to scope and requirements causing delays issues are often raised and result in multiple rounds of feedback you're not multiple rounds of feedback you're not multiple rounds of feedback you're not sure who or what could be the cause. What will you do next?", "options": ["Perform root cause analysis with your project team on the problem to brainstorm ideas sure that's pretty pretty good we'll put sure that's pretty pretty good we'll put sure that's pretty pretty good we'll put that as a maybe for now", "Raise a risk in the risk register for the project delay and", "Review the issue log the risk register and the", "Change log for the most frequent request ers then"], "correct": 2}, {"id": 17, "text": "Question 17 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 18, "text": "Question 18 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 19, "text": "Question 19 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 20, "text": "Question 20 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 21, "text": "If we can do it uh so what do we do in these situations uh let's have a look start an open dialogue let's have a look start an open dialogue let's have a look start an open dialogue with the functional manager that sounds sounds pretty promising actually i'm sounds pretty promising actually i'm sounds pretty promising actually i'm starting to see a trend as well in these questions in that they're a lot more questions in that they're a lot more questions in that they're a lot more about communication and collaboration and working together they're more about and working together they're more about and working together they're more about working with people as opposed to you know the processes that you'll find in know the processes that you'll find in know the processes that you'll find in the pach sixth edition which is really process based this one is more people based probably with that agile you know way of working that you'll see it's much way of working that you'll see it's much way of working that you'll see it's much more common it's much more about people more common it's much more about people more common it's much more about people so this seems to be on track here raise the incorrect scope items and their impact and start an open dialogue i think that's actually pretty good we'll think that's actually pretty good we'll think that's actually pretty good we'll see what else we have just in case override the marketing manager's override the marketing manager's override ", "options": ["Take a lot of something there's going to", "Engage engagement we we're trying to", "Increase based on a threat as well won't", "Work with people create a project gant chart"], "correct": 1}, {"id": 22, "text": "When it's not money or bonuses or you know or it's not money or bonuses or you know or it's not money or bonuses or you know or fame we're actually internally motivated fame we're actually internally motivated fame we're actually internally motivated we feel pride in what we're doing we're we feel pride in what we're doing we're we feel pride in what we're doing we're happy with the work transferring to another team in the same company may risk the same result and threatening your team may embed their behavior further oh that's right cuz when you further oh that's right cuz when you further oh that's right cuz when you disagree with someone directly it's like disagree with someone directly it's like disagree with someone directly it's like have you ever found do they change their mind immediately no they dig their heels in they go well no i'm even more right in they go well no i'm even more right in they go well no i'm even more right so and then it just becomes a a battle like that and this is where we're going like that and this is where we're going like that and this is where we're going we're going with these ways around we're going with these ways around we're going with these ways around little psychological tricks uh you know instead of making people embed that behavior further where actually helping them come out of that behavior through these things pairing with a customer showing them how they're making a showing them how they're making a showing them how they're ma", "options": ["Take the side of the technology manager as the scope that impacts delivery should be controlled i don't think we really want controlled i don't think we really want controlled i don't think we really want to", "Facilitate that's pretty important facilitate that's pretty important", "Facilitate that's a good word to keep the that's a good word to", "Keep the that's a good word to keep the that's a good word to"], "correct": 2}, {"id": 23, "text": "You are working on a we've got next you are working on a we've got next you are working on a project where the project team is completely distributed around the country in multiple sites including working from home some of the project team members have not been able to contribute to the project and there are concerns from the program that the project will fall behind. What will you do next?", "options": ["Raise a request to the program to collocate all your project team members as soon as possible uh another good idea but how feasible is that really uh are we really going to uproot everyone from their respective cities and you know put them in one city in the one", "Request to the program to collocate all your project team members as soon as possible uh another good idea but how feasible is that really uh are we really going to uproot everyone from their respective cities and you know put them in one city in the one", "Option C", "Option D"], "correct": 3}, {"id": 24, "text": "If you want to check that out for yourself i do recommend it it's not a yourself i do recommend it it's not a yourself i do recommend it it's not a bad read it's actually pretty good not bad read it's actually pretty good not bad read it's actually pretty good not as big as the sixth edition which is nice so it's a little bit lighter um all nice so it's a little bit lighter um all nice so it's a little bit lighter um you guys go for that one i think we're getting through these doing think we're getting through these doing think we're getting through these doing really really well let's keep going you really really well let's keep going you really really well let's keep going you are initiating a project to to a sales team where the process will change significantly even though the outcome of a completed sale will remain the same okay that's fair enough so got a process okay that's fair enough so got a process okay that's fair enough so got a process uh but the process is changing even though the sale is the same so you know that's fair enough we same so you know that's fair enough we same so you know that's fair enough we still want the same outcome the process is different okay uh the functional manager is concerned about the change and any disruption that it might bring. What will you do next?", "options": ["Change impact we're changing a whole", "Change impact we're changing a whole process here kick off the project with a single delivery okay at the end of the project when the process", "Option C", "Option D"], "correct": 1}, {"id": 25, "text": "If we get either way actually let's see if we get either way actually let's see if we get any tips from the answer uh this question covers delivery cadence and their various benefits a process re-engineering project may not have any re-engineering project may not have any re-engineering project may not have any deliveries until near the end of the project when the new process is rolled out and ready okay all right so that's out and ready okay all right so that's out and ready okay all right so that's what we're talking about there directly what we're talking about there directly what we're talking about there directly from the perot guide page 34 under delivery cadence uh quite tricky could have gone both ways um but that is something good to know and be aware of when you're doing the exam under those when you're doing the exam under those when you're doing the exam under those scenarios under a process scenario re-engineering process all right let's re-engineering process all right let's re-engineering process all right let's keep going we're halfway through this keep going we're halfway through this keep going we're halfway through this little section hopefully they're not as little section hopefully they're not as little section hopefully they're not as tricky as that one but we'll soon find tricky as that one but we'll soon find tricky as that one but we'll soon find out you're working on a project where out you're working on a project where out you're working on a projec", "options": ["Release in one big in one go so improvements along the way but one big", "Plan everything up front and then deliver in one", "Option C", "Option D"], "correct": 1}, {"id": 26, "text": "You're choose all right next question you're choose all right next question you're working on a new product for your organization where the requirements are complex and are likely to change a few times as the project progresses all right that's another good clue so right that's another good clue so right that's another good clue so requirements are going to change the organization also needs usable parts of the product to be released that's another good clue those released that's another good clue those released that's another good clue those are our increments as fast as possible to capture some of the market that they're aiming for away from their they're aiming for away from their they're aiming for away from their competitors. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 27, "text": "When requirements are subject to uncertainty and change and a clear vision is established at the start of the project and initial known requirements are refined or replaced in accordance with user feedback as we're going along or user feedback as we're going along or user feedback as we're going along or unexpected expected events under page 35 adaptive approach in the pmot guide 7eventh edition wonderful how did you go with that one i think we've got we've with that one i think we've got we've with that one i think we've got we've had a few on the same idea here now that development approach it's pretty good to development approach it's pretty good to development approach it's pretty good to get into so uh especially the different scenarios that we will see let's get scenarios that we will see let's get scenarios that we will see let's get into the next question we've only got into the next question we've only got into the next question we've only got three to go for this little section a new project has been kicked off in your organization due to a recent government inquiry into your industry okay government could be a clue here so lots of regulation which found multiple processes with significant regulatory oversight that need to change okay um usually when government or regulation is involved we if this is about processes again or development approaches okay which it seems to be it's usually going which it seems to be it's usually going which it seems to be it's usually g", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 28, "text": "Before and don't know about waterfall agile or and don't know about waterfall agile or and don't know about waterfall agile or any of the different models your your project may also have requirements that are certain or uncertain with varying levels of risk so you're not sure which levels of risk so you're not sure which levels of risk so you're not sure which approach to use as you begin this new project. What will you do next?", "options": ["Release steps from the very beginning of the project to the very end of the project where we", "Ensure you can respond to change while your team's capability to", "Change while your team's capability to", "Option D"], "correct": 1}, {"id": 29, "text": "Question 29 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 30, "text": "Question 30 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 31, "text": "You're a project truly believe in you you're a project manager in an organization with a directive project management office and are currently in between projects the pmo asks you to prepare for an upcoming project in the accounting area by meeting with the functional manager there you have no team no scope and no requirements and no timeline as yet. What will you do next?", "options": ["Ask the functional what we've got", "Ask the functional manager for their wish wish list of improvements so you can", "Create a project management plan so the project scope budget and", "Plan so the project scope budget and"], "correct": 3}, {"id": 32, "text": "Before initiating a project of any sort we start with a vision statement project charter or business case in order to identify a coordinated path to achieve the desired outcomes page 52 under planning overview in the pum guide 7th edition all right nice one to start with little bit of leadership little bit of vision that's pretty good let's see of vision that's pretty good let's see of vision that's pretty good let's see what we have next you're working on a what we have next you're working on a what we have next you're working on a project where part of the project delivers a high value highrisk component another part of the project delivers a routine change to the system okay tricky uh your project sponsor wants to gain the business quickly the business value quickly uh but your project team want to start with the work that they're start with the work that they're start with the work that they're familiar with first. What will you do next?", "options": ["Prioritize the higher risk items at the end of the project um okay okay let's see what else project um okay okay let's see what else project um okay okay let's see what else we have", "Prioritize the high- risk items we have", "Prioritize the high- risk items at the start of the project okay uh you know what that actually sounds pretty good because that's that's sort of a good because that's that's sort of a good because that's that's sort of a principle that we do try and", "Plan out the work in detail and secure a scope baseline with formal"], "correct": 1}, {"id": 33, "text": "You are working on an agile project where the functional manager you're where the functional manager you're where the functional manager you're delivering to only has a high level idea of the system requirements that they'll of the system requirements that they'll of the system requirements that they'll need the functional manager suggests a work breakdown structure however your team feel that that is more for a predictive or waterfall delivery approach oh okay. What will you do next?", "options": ["Keep the work at a high level until you're ready to work on it level until you're ready to work on it level until you're ready to work on it and then you can", "Use the functional ask the functional area for more detailed requirements before the project begins i think we want to", "Ask the functional area for more detailed requirements before the project begins i think we want to", "Collaborate with the functional area we can't just"], "correct": 0}, {"id": 34, "text": "When we're estimating on tricky because when we're estimating on tricky because when we're estimating on things uh our estimates are really bad at the beginning and they get more honed they get better and better and better as we get more knowledge and information as the project goes along um uh so that's the project goes along um uh so that's the project goes along um uh so that's something that we really need to be aware of and not to mention there's aware of and not to mention there's aware of and not to mention there's actually ranges so now that i think about this more uh there's ranges at you about this more uh there's ranges at you about this more uh there's ranges at you know when it's really far away it's like know when it's really far away it's like know when it's really far away it's like uh minus 50% + 75% or something similar uh minus 50% + 75% or something similar uh minus 50% + 75% or something similar is they call it a rough order of magnitude uh that that's you know that's magnitude uh that that's you know that's magnitude uh that that's you know that's a rough guide at the beginning and it gets narrower and narrower so then i think the budget estimate is -1 to + 25 or something similar um or -1 to + 25 or something similar um or -1 to + 25 or something similar um or you know and then maybe -5 to + 10 you know and then maybe -5 to + 10 you know and then maybe -5 to + 10 something like that until ultimately it's delivered and the estimates are it's delivered an", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 1}, {"id": 35, "text": "You are working on a business case where you know that the industry is undergoing a significant change at the moment and there could be many different impacts to your project benefits before it's your project benefits before it's your project benefits before it's delivered completely okay your project sponsor asks you to uh for the best estimate of benefits that you can give under the circumstances. What will you do next?", "options": ["Ask so it's not going to be the best", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 36, "text": "When the feature makes its way into our backlog and then to the time it is delivered to the customer or released uh so into production for example so that's the lead time that's the full that's the lead time that's the full that's the lead time that's the full time but in between we might have different story cards being completed and that is our cycle time the cycle time is when a developer starts picking it up uh and then completes their work that's the cycle time for their work so that's the cycle time for their work so that's the cycle time for their work so all of that to say i think our answer here is going to be answer c you know what else is pretty good we are down to the last two questions you've down to the last two questions you've down to the last two questions you've done an amazing job let's keep keep done an amazing job let's keep keep done an amazing job let's keep keep going we're nearly nearly there you're going we're nearly nearly there you're going we're nearly nearly there you're working on a project that has recently moved to a more agile way of work the team have not completely taken on the scrum approach however and are comfortable working with a more flow-based flow-based flow-based approach you uh moving user stories across a can ban board so flow-based is across a can ban board so flow-based is across a can ban board so flow-based is that can ban approach that we saw before you're wanting to get an estimate on how you're wanting to get an estimate o", "options": ["Limit there's usually a work in progress", "Schedule performance index that's by the", "Option C", "Option D"], "correct": 1}, {"id": 37, "text": "Question 37 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 38, "text": "Question 38 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 39, "text": "Question 39 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 40, "text": "Question 40 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 41, "text": "You're day and i know you can do it you're working on a project where you have been completing the deliverables in sequence and the project work is starting to fall behind the project sponsor asks you to speed up the work and reduce the time for the project to be delivered but also makes it very clear that there is no more money to use when speeding up the work what will you do next okay so we've work what will you do next okay so we've work what will you do next okay so we've got sequence here oh and it looks like we've got a few different options around we've got a few different options around we've got a few different options around uh schedule around improving the schedule so bringing our schedule back on track we've got leads and on track we've got leads and on track we've got leads and lags um okay but what are we trying to do here we're doing things in sequence do here we're doing things in sequence do here we're doing things in sequence we have no more money unfortunately uh and so we can't use schedule crashing so and so we can't use schedule crashing so and so we can't use schedule crashing so schedule crashing is where we're schedule crashing is where we're schedule crashing is where we're throwing money and resources at the at the schedule to bring it back on track so we can put that out of uh out of our minds because we don't have any extra minds because we don't have any extra minds because we don't have any extra money here uh leads and lags we could use that b", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 42, "text": "You're doing a great job how did you go you're doing a great job how did you go with that one i think that was another good addition to our schedule compression compression techniques hard to say but uh easy to get it right for us let's see what we got next okay your us let's see what we got next okay your us let's see what we got next okay your team are new to agile oh we've got agile team are new to agile oh we've got agile team are new to agile oh we've got agile and have previously been working with waterfall okay maybe moving from waterfall to agile your key customer asks you for a project schedule the project team believes using a project schedule is from the old waterfall way of working and they shouldn't have to of working and they shouldn't have to of working and they shouldn't have to create one. What will you do next?", "options": ["Schedule for example a product road map would usually do the trick let's see would usually do the trick let's see would usually do the trick let's see what we have", "Plan customer that we don't need to", "Ask your team to develop a high level", "Develop a high level release plan like a product road map showing the features to be included in each"], "correct": 3}, {"id": 43, "text": "If we're uh so those release and then if we're uh so those release and then if we're uh so those are the increments that we're delivering are the increments that we're delivering are the increments that we're delivering in other words that incremental planning so that's really good to know page 61 so that's really good to know page 61 so that's really good to know page 61 under adaptive schedule planning in the pach guide 7th edition wonderful stuff and i'm already learning more about the and i'm already learning more about the and i'm already learning more about the pbx 7th edition without having to actually read it myself and that's even actually read it myself and that's even actually read it myself and that's even better even though it's not too bad it's better even though it's not too bad it's better even though it's not too bad it's not as big as the sixth edition which was a huge huge book we're really was a huge huge book we're really was a huge huge book we're really getting through these you're doing great getting through these you're doing great getting through these you're doing great you're working in a project team that you're working in a project team that you're working in a project team that has recently moved to an agile way of work your business analysts want to gather the requirements solutions match them to the scope and do a work breakdown structure for the whole deliverable your product owner says this will take too long and is not agile enough for thei", "options": ["Ask your team to review the scope management", "Ask your team to time box work on the highest priority items in the backlog", "Review the project charter for the high level scope and then use this to begin delivery quickly uh i think there's definitely a better uh i think there's definitely a better uh i think there's definitely a better answer than that we still need to", "Option D"], "correct": 2}, {"id": 44, "text": "Before they begin and here we've got page 62 under time boxes in we've got page 62 under time boxes in we've got page 62 under time boxes in the pbot guide if you want to check out that one for yourself which i really do recommend you can go straight there you don't have to search for that uh and don't have to search for that uh and don't have to search for that uh and that's really really good to know all that's really really good to know all that's really really good to know you have been asked to put together a project team that will be able to deliver quickly. What will you do next?", "options": ["Ask your pmo for current available resources and", "Option B", "Option C", "Option D"], "correct": 3}, {"id": 45, "text": "You're putting together a next one you're putting together a next one you're putting together a project team to deliver an accounting system to officers around the country the accounting system you're moving to the accounting system you're moving to the accounting system you're moving to has not been used by anyone in your organization before the project is quite high risk and the delivery needs to be right the first time. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 1}, {"id": 46, "text": "You are halfway through your agile project when there is a significant change to the project scope after it was found that the project would not be able to deliver the benefits that it had promised you check your project budget and there are contingency and management reserves available. What will you do next?", "options": ["Take the project scope change to the", "Change to the change control board for control board for control board for approval i mean maybe let's see what approval i mean maybe let's see what approval i mean maybe let's see what else we have", "Change control board for control board for control board for approval i mean maybe let's see what approval i mean maybe let's see what approval i mean maybe let's see what else we have", "Use the available contingency reserves to make the appropriate"], "correct": 3}, {"id": 47, "text": "Question 47 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 48, "text": "Question 48 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 49, "text": "Question 49 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 50, "text": "Question 50 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 51, "text": "On a project that is behind schedule and slightly over budget you raise an issue at the steering committee meeting where they advise that there is no additional funding available for the project and it the project must finish on time you believe that you can optimize the project process to bring it back on track okay that's good what will you do track okay that's good what will you do track okay that's good. What will you do next?", "options": ["Utilize the project's contingency now", "Perform project activities in parallel completing multiple items at once instead of one at a time that's", "Schedule instead of one at a time that's", "Add activities anything that doesn't"], "correct": 3}, {"id": 52, "text": "Improvement 100% let's go with answer d improvement 100% let's go with answer d excellent work all right ways of optimizing the process project processes for the environment include lean production methods retrospectives or lessons learned and finding where the next best funding is spent adding people and resources may not always improve things it can also increase the complexity and the communication channels on your project making it more difficult more ways to pe for people to communicate and get messages wrong as well so for for mixed messages to happen page 71 under project processes in the pumb guide seventh edition and that was a great first question for us in this little section really really wonderful way to kick us off all right let's see way to kick us off all right let's see way to kick us off all right your project what we've got next your project what we've got next your project management office is optimizing all the projects within their portfolio they ask for your advice in tracking the type of work each team member is doing and how long it takes suggesting that they categorize and record their work in addition to the work itself oh bit painful. What will you do next?", "options": ["Take it out of their hands because we want them to be doing the actual work instead", "Recommend an automated reporting tool cuz their because recording their work is value ad it's not value ad it doesn't", "Add value it's not value ad it doesn't", "Add value to the end customer it's just a an to the end customer it's just a an to the end customer it's just a an administration you know task for us to do"], "correct": 1}, {"id": 53, "text": "You're working on an agile activities you're working on an agile activities you're working on an agile project as a scrum master where the functional manager has worked with some people in your development team before functional manager being from the business so usually from a functional area uh they're the manager in that area uh they're the manager in that area uh they're the manager in that particular area she approaches them directly to see if they can add a feature to the product in their current sprint what will will you do next okay so we've got our team um this doesn't so we've got our team um this doesn't so we've got our team um this doesn't sound like she's the product owner even sound like she's the product owner even sound like she's the product owner even though she's from the functional area um though she's from the functional area um though she's from the functional area um but she's approaching your team directly but she's approaching your team directly but she's approaching your team directly and trying to get them to do work so there's a better way to do this it needs there's a better way to do this it needs there's a better way to do this it needs to be prioritized first especially in an agile team let's see what we've got here agile team let's see what we've got here agile team let's see what we've got here adjust the sprint backlog to allow for the additional the additional the additional feature uh maybe but then we'd have to feature uh maybe but then ", "options": ["Review the communications management", "Plan obviously not because we've got ad hoc requests", "Ask the new we've got ad hoc requests", "Ask the new stakeholders to review your communications management"], "correct": 0}, {"id": 54, "text": "When price is the deciding factor it's when price is the deciding factor it's when price is the deciding factor it's just a quote and this is direct from the pach guide 7th edition as well page 75 the big the big the big process very very handy information to have you can do it what have we got next you're working on what have we got next you're working on what have we got next you're working on a project where part of the work is planned carefully up front and another part is subject to change you negotiate terms and conditions including cost delivery and payment dates the vendor is concerned about confusion that might occur between pre-planned and changeable occur between pre-planned and changeable occur between pre-planned and changeable work. What will you do next?", "options": ["Adjust your project plan to suit either a predictive or adaptive approach to reduce the confusion so do we", "Plan to suit either a predictive or adaptive approach to reduce the confusion so do we", "Option C", "Option D"], "correct": 3}, {"id": 55, "text": "If you want to check that out for yourself and i really recommend you do you know this is really good you can go straight there and check that out and you know what else we can check out is the last three questions in this particular section wow we're really this particular section wow we're really this particular section wow we're really getting through this you're doing an getting through this you're doing an getting through this you're doing an amazing job not far to go let's keep amazing job not far to go let's keep amazing job not far to go let's keep going you're working in an agile project going you're working in an agile project going you're working in an agile project where there are vastly differing levels of product knowledge within your team the scrum master suggests that you try to gain knowledge by osmosis because the project information may be lost when only communicating by email. What will you do next?", "options": ["Refer to the organizational process assets to capture the team's process assets to capture the team's process assets to capture the team's explicit knowledge explicit knowledge is things that can be explained so like a like processes that we can put in", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 56, "text": "You're working as a product doing great you're working as a product doing great you're working as a product owner this time and have placed high level information about the product in the product backlog that's good the the product backlog that's good the the product backlog that's good the highest priority feature is at the top that's also good senior users informing that's also good senior users informing that's also good senior users informing the project are unable to clearly articulate their requirements okay that's a clue and they're concerned that that's a clue and they're concerned that that's a clue and they're concerned that the product will not truly meet their needs. What will you do next?", "options": ["Ask your stakeholders to submit a", "Change request and update the project scope accordingly again again we need to articulate requirements so let's say no articulate requirements so let's say no articulate requirements so let's say no for now begin breaking down the work into user stories to", "Request and update the project scope accordingly again again we need to articulate requirements so let's say no articulate requirements so let's say no articulate requirements so let's say no for now begin breaking down the work into user stories to", "Update the project scope accordingly again again we need to articulate requirements so let's say no articulate requirements so let's say no articulate requirements so let's say no for now begin breaking down the work into user stories to"], "correct": 1}, {"id": 57, "text": "Question 57 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 58, "text": "Question 58 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 59, "text": "Question 59 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 60, "text": "Question 60 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 61, "text": "You're working in an believe in you you're working in an agile team who are trying to break down the project requirements and the scope they have created a scope statement and a work breakdown structure excellent but i'm not sure how it will work when that i'm not sure how it will work when that i'm not sure how it will work when that now that they're using sprints and user now that they're using sprints and user now that they're using sprints and user stories okay so is this about how to use a work breakdown structure sort of a tool or you know that way of working in an agile way of working as well um because it definitely can fit we might just call it something different for example so what will we do next okay assign activities to each of the scope items in the work breakdown structure and place some on a again chart that's and place some on a again chart that's and place some on a again chart that's what we do in a traditional uh project and it certainly can work in an agile project as well it might be our product road map um but we just put it in the view of a gant chart in a in a project schedule so there's our items over time schedule so there's our items over time schedule so there's our items over time um i mean so maybe let's see what else um i mean so maybe let's see what else um i mean so maybe let's see what else we have just in case create a product road map with the team using the lowest most detailed part of the work breakdown structure um usually a product ro", "options": ["Ensure it's correct yeah i mean users to", "Ensure quality testing on the user story is completed and passed also good practice these are all great answers um but the", "Option C", "Option D"], "correct": 0}, {"id": 62, "text": "If we catch a there's failure costs if we catch a there's failure costs if we catch a defect and there's internal and external defect and there's internal and external defect and there's internal and external failure so if we catch a defect before it reaches the customer it's internal if it reaches the customer it's internal if it reaches the customer it's internal if it reaches the customer and it's a it reaches the customer and it's a it reaches the customer and it's a failure uh you know in the quality then that's external failure costs the worst that's external failure costs the worst that's external failure costs the worst kind and the most costly as well so appraisal costs where appraising we're appraisal costs where appraising we're appraisal costs where appraising we're reviewing we're checking this is our reviewing we're checking this is our reviewing we're checking this is our testing uh testing phase so let's see testing uh testing phase so let's see testing uh testing phase so let's see what we've got here ensure there's what we've got here ensure there's what we've got here ensure there's enough for training um well that's i enough for training um well that's i enough for training um well that's i think we've had that in a previous think we've had that in a previous think we've had that in a previous question that's probably preventative so question that's probably preventative so question that's probably preventative so we're we're preventing uh quality issues w", "options": ["Place so people can pull that information and see it at any time time uh let's see what we've got collect the uh let's see what we've got collect the uh let's see what we've got collect the planned value versus earned value to", "Show the executives any variance in the", "Suggest a demonstration of the feature developed during each sprint instead and a burndown chart of future product releases right okay so we're not going with a big visual you we're not going with a big visual you we're not going with a big visual you know area we're going with a", "Direct know area we're going with a"], "correct": 2}, {"id": 63, "text": "Here you know that also leads to disengagement you know lots of lead leading indicators there lagging indicators include work completed or schedule variants page 96 leading indicators in the pbot guide 7th edition you notice fewer and fewer user stories being completed so we've got increase in size and so we've got increase in size and so we've got increase in size and complexity and now the work is starting to go down and the road map of features scheduled to go live is being pushed out so our schedule is being pushed out uh so. What will you do next?", "options": ["Place a limit on the work in progress and", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 64, "text": "Schedule and cost variance you know more of an old waterful way of working um and again an internal team measure let's go with answer c wonderful measure let's go with answer c wonderful measure let's go with answer c wonderful work an agile project tracks and demonstrates the actual features delivered with a stable team cost is most often fixed oh so that's good to most often fixed oh so that's good to most often fixed oh so that's good to know not really cost variance because cost is fixed our team is stable we just deliver features until we run out of money the schedule is also fixed and the scope is variable depending on what the customer wants to prioritize in the given time so the scope is the thing that changes page 100 under baseline performance in the pinball guide wonderful work guys you beat me to that one as well possibly i think we're one as well possibly i think we're one as well possibly i think we're getting pretty good at these you have. What will you do next?", "options": ["Ask the product owner to that's a know", "Have the deciding factor we can move much faster we don't factor we can move much faster we don't factor we can move much faster we don't have to get a cast of thousands so again that is a no", "Option C", "Option D"], "correct": 3}, {"id": 65, "text": "You're doing question we're nearly there you're doing question we're nearly there you're doing great you know and these have been this has been some good learning for me i know that let's do this last one and know that let's do this last one and know that let's do this last one and we're nearly there your agile project we're nearly there your agile project we're nearly there your agile project team has only recently formed the product is still unclear and there have been disagreements and minor conflicts over the past two weeks as the team find their rhythm what would uh you would like things to improve but you can't like things to improve but you can't like things to improve but you can't quite pinpoint or address the problem. What will you do next?", "options": ["Take actions and we problem solve and move forward from there so let's see move forward from there so let's see move forward from there so let's see what we've got i see there's a what we've got i see there's a what we've got i see there's a retrospective here uh", "Recommend it to a it's would we would we", "Ask them why they're your team and", "Ask them why they're unhappy maybe but that could just turn into you know a a miserable session you know where people are just complaining we're not actually improving so pretty we're not actually improving so pretty we're not actually improving so pretty important there"], "correct": 1}, {"id": 66, "text": "Question 66 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 67, "text": "Question 67 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 68, "text": "Question 68 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 69, "text": "Question 69 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 70, "text": "Question 70 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 71, "text": "You're doing a wonderful job keep going you're doing a wonderful job keep going the project has faced serious impacts in getting materials with supply chains being disrupted and a global pandemic sounds familiar and is currently 3 weeks behind schedule behind schedule behind schedule okay you take this information to the next project steering committee meeting where they advise they need more information on how much the project project will end up costing okay. What will you do next?", "options": ["Schedule how much are we go how much is our budget going to be budget at completion or something similar let's completion or something similar let's completion or something similar let's see what we've got here", "Use the current see what we've got here", "Use the current budget with no deviations until it runs out um that probably won't", "Use the if there's a better option use the if there's a better option"], "correct": 3}, {"id": 72, "text": "You go that's the formula for that there you go that's the formula for that there you go that's the formula for that um you may not get the direct formula but you'll get a similar question you but you'll get a similar question you but you'll get a similar question you know around these formulas like you will on the pmp exam pretty good page 104 under forecasts directly from the perote guide wonderful stuff you and the project team a considerable amount of time to do and reduces time spent on creating the actual product this is nonv value ad work from the lean you know lean thinking and lean production method. What will you do next?", "options": ["Suggest the leaders come to the sprint", "Review is demonstrating the actual product that we've created in the last sprint so we've created in the last sprint so we've created in the last sprint so whatever usable piece of value i think that's probably going to be our one", "Option C", "Option D"], "correct": 1}, {"id": 73, "text": "You're working on a project that next you're working on a project that next you're working on a project that has planned as much as they can up front you would like them to move to a more agile way of work currently the work is hidden the team catches up only once a week in a working group and it's hard to week in a working group and it's hard to week in a working group and it's hard to see what each person is working on and to keep track of it. What will you do next?", "options": ["Ask your team to report on their work in a written status", "Remove blockers make sure that everyone has what they need to get the work done for that day um", "Ask the team to work to move their work to a central visible task board like a canan board and then have a short meeting each day to discuss progress on their cards like a standup meeting i think that is probably where we're going", "Remove the team meetings all we're going"], "correct": 2}, {"id": 74, "text": "The team meets for 15 minutes each day to discuss progress and raise any impediments which are blockers to their work page 109 visual controls task boards in the pbot guide if you want to go and check that out directly wonderful stuff really getting through these questions so let's keep going these questions so let's keep going these questions so let's keep going you're working on a hybrid project where you're working on a hybrid project where you're working on a hybrid project where the majority of the work has been planned up front the team manages their work via a canb board and report on progress and blockers each day as the project evolves stakeholders have added more and more scope to the product with one executive raising an urgent feature that needs to be added. What will you do next?", "options": ["Ask the product owner to work with stakeholder requests noting the need to swap the new item for an existing item that is prioritization so they might want to", "Work with stakeholder requests noting the need to swap the new item for an existing item that is prioritization so they might want to", "Add something but it's going to want to", "Work with the stakeholder to raise a change"], "correct": 0}, {"id": 75, "text": "If as long as we're delivering the highest long as we're delivering the highest long as we're delivering the highest value stuff it shouldn't be a problem value stuff it shouldn't be a problem value stuff it shouldn't be a problem page 110 under canb board in the perot guide seventh edition you do next this is super interesting actually so our measure of success is the number of features and so what does the team do they deliver as many features as they possibly can uh but at the cost of everything else by the sounds of it because now we've got bugs uh and we've because now we've got bugs uh and we've because now we've got bugs uh and we've got issues and all of these things so it's actually not the best quality it's actually not the best quality it's actually not the best quality product however we are meeting our success measures we're moving quickly so success measures we're moving quickly so success measures we're moving quickly so how do we fix this or how do we help this. What will you do next?", "options": ["Meet customer satisfaction measures and so you'll see the behavior", "Change as we you'll see the behavior", "Option C", "Option D"], "correct": 1}, {"id": 76, "text": "If we're not measuring it at all but us if we're not measuring it at all but us if we're not measuring it at all but then we stick our head in the sand and all of a sudden it just gets worse so for our purposes we've got two good for our purposes we've got two good for our purposes we've got two good answers there they're both good let's go answers there they're both good let's go answers there they're both good let's go to the root cause of the issue let's fix to the root cause of the issue let's fix to the root cause of the issue let's fix the measures and see if that helps initially answer be okay great oh yeah there it is the hawthorne effect there you go so i can't remember it's by you go so i can't remember it's by you go so i can't remember it's by someone called hawthorne i think obviously um and so what we measure influences the behavior of our team in this case we measure the number of features only features only features only and the team delivered those features but at the cost of quality and customer satisfaction by adding measures for those two things that will balance out the team's behavior wonderful good you the team's behavior wonderful good you the team's behavior wonderful good you know wonderful thing to know really really important stuff and good for the real world as well in your own project and in your own team when you're leading and in your own team when you're leading and in your own team when you're leading and managing for yourself page 112 measur", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 77, "text": "You're few to go let's get into it you're few to go let's get into it you're working on a project with a vendor where there is a significant where there is significant ambiguity involved okay again uh v ua ambiguity and multiple options that the team could go with many outcomes are possible that have varying degrees of impact to improve the situation so. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 78, "text": "Question 78 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 79, "text": "Question 79 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 80, "text": "Question 80 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 81, "text": "Your organization. What will you do next?", "options": ["Wait for the third party vendor to fix the vulnerability i think in this case this is pretty serious so i think we need to get", "Take action or get some sort of traction on this quickly or straight away if possible so i think that's a no for now transfer the risk by that's a no for now transfer the risk by that's a no for now transfer the risk by asking a different vendor to", "Create a feature with no vulnerability in their design i mean that that's sort of taking design i mean that that's sort of taking design i mean that that's sort of taking action but in the meantime what are we going to do that could actually", "Take time to do h i mean it's it's a maybe time to do h i mean it's it's a maybe time to do h i mean it's it's a maybe maybe a low maybe for that one"], "correct": 2}, {"id": 82, "text": "When the project team agrees that the threat is outside the scope of the project or exceeds the project manager's authority exceeds the project manager's authority exceeds the project manager's authority so that's a very good one to know so that's a very good one to know so that's a very good one to know obviously we could try and manage it first but in this case it's well outside first but in this case it's well outside first but in this case it's well outside of our realm i think it's appropriate to of our realm i think it's appropriate to of our realm i think it's appropriate to escalate it and that's page 123 in the escalate it and that's page 123 in the escalate it and that's page 123 in the pbot gu 7th edition under overall project risks and threats which is really good to know so you can go directly there if you want to very very handy you brainstorm risk responses with your project team and project sponsor and decide you cannot transfer a certain high impact risk okay so can't transfer high impact risk okay so can't transfer high impact risk okay so can't transfer it and it is high impact you also can't it and it is high impact you also can't it and it is high impact you also can't avoid the risk and there is no one in the organization to escalate it to okay that doesn't leave us with many options that doesn't leave us with many options that doesn't leave us with many options your project sponsor agrees that you should actively accept so actively accept the risk and i", "options": ["Prioritize it and we prioritize the the highest risks first i think uh let's see if we have anything think uh let's see if we have anything think uh let's see if we have anything that aligns with that", "Take them forever to to do as well so let's put a no for that one for well so let's put a no for that one for well so let's put a no for that one for now prior here we go", "Prioritize that beautiful word in agile", "Prioritize that that's actually how we prioritize that that's actually how we"], "correct": 3}, {"id": 83, "text": "Before the project moves to execution. What will you do next?", "options": ["Note the risks with appropriate controls and", "Add a contingency reserve in the project budget as we've been over a the project budget as we've been over a the project budget as we've been over a few times you've got your project cost few times you've got your project cost few times you've got your project cost you", "Add a contingency reserve for risks which becomes your project budget and then you", "Option D"], "correct": 2}, {"id": 84, "text": "If they continue to delay progress frequent demonstrations of the product can also surface threats and opportunities as can retrospectives while quality is everyone's responsibility and the can everyone's responsibility and the can everyone's responsibility and the can band board does visualize the work b is the best answer page 127 under risk review in the pbot guide 7eventh edition you know i mean i see this happen all the time replace this name with some other name you you name it it's happened um what you you name it it's happened um what you you name it it's happened um. What will you do next?", "options": ["Guide as that's a big theme in the pum", "Guide as well is tailoring to suit your project environment or to to suit the environment that you're in so we can environment that you're in so we can environment that you're in so we can", "Option C", "Option D"], "correct": 0}, {"id": 85, "text": "You're doing all right only three to go you're doing all right only three to go you're doing great let's keep going your project great let's keep going your project great let's keep going your project management office is in the middle of a companywide ways of working transformation okay similar situation here they have taken a popular project framework and are tailoring it to the organization with branded templates and processes that meet their existing governance requirements so uh controlling pmo perhaps you've been controlling pmo perhaps you've been controlling pmo perhaps you've been asked to help finalize the process. What will you do next?", "options": ["Implement ongoing improvement so again we won't get it improvement so again we won't get it improvement so again we won't get it right the first time we're going to need right the first time we're going to need right the first time we're going to need to", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 86, "text": "Question 86 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 87, "text": "Question 87 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 88, "text": "Question 88 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 89, "text": "Question 89 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 90, "text": "Question 90 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 91, "text": "You've been truly truly believe in you you've been planning a project for the last 2 months gathering requirements in scope and assigning tasks to a schedule as you get closer to the execution phase of your project you decide to what delivery you need to decide what delivery approach you will use the requirements are likely to change okay require a medium amount of complience that's good to know but of complience that's good to know but of complience that's good to know but can be released in one go. What will you do next?", "options": ["Change and update things but we've got", "Update things but we've got change and", "Option C", "Option D"], "correct": 3}, {"id": 92, "text": "If needed and is collocated in the same space so they we can learn by osmosis you will have heard that a few times in this series uh predictive is best when lots of planning is needed hybrid is best when there are two different approaches needed and incremental delivers features over time page 141 under taylor for the project project team in the pbot guide sth edition wonderful wonderful stuff and we're wonderful wonderful stuff and we're wonderful wonderful stuff and we're certainly getting through them let's see certainly getting through them let's see certainly getting through them you have been what we've got next you have been what we've got next you have been working as a project manager in an organization for some time where an agile centric delivery approach and way of work has been selected and tailored for the organization good stuff over the past few months you notice several things are not working and could improved as you begin new projects. What will you do next?", "options": ["Take actions on the thing things that didn't go well and we can improve that didn't go well and we can improve that didn't go well and we can improve them over time", "Review a control chart and value stream map to see non valu added activities and", "Option C", "Option D"], "correct": 2}, {"id": 93, "text": "In an agile environment holding a retrospective together what is working well and what is challenging us or could be improved is the best way to find ongoing improvements so this can definitely work um you know it's still a good way to do um you know it's still a good way to do um you know it's still a good way to do it uh but the best way is you know close in person place and time with our retrospective under page 151 tailoring diagnostics for agile teams pretty good you have one let's see what we have next you have one let's see what we have next you have been working on a project to deliver a new customer data system and have noticed that the work is starting to slow down fewer user stories are appearing in your sprint backlog as they are not ready okay and you you hold a retrospective with your team good thing maybe we we read we' previously read the maybe we we read we' previously read the maybe we we read we' previously read the last question and we got a few tips maybe and we discovered that there are long delays waiting for requirements and acceptance criteria approvals okay. What will you do next?", "options": ["Escalate the issue to the functional manager to", "Escalate it but is that still going to solve the problem you know so we still need to problem solve this and manage it ourselves as project managers i think not the", "Option C", "Option D"], "correct": 0}, {"id": 94, "text": "You have been assigned let's keep going you have been assigned let's keep going you have been assigned to take over an existing project as the pro previous project manager leaves for another opportunity in working with your team you notice that there's a large team you notice that there's a large team you notice that there's a large amount of work currently in progress all at once oh i think we've we've tackled at once oh i think we've we've tackled at once oh i think we've we've tackled this before with team members working on multiple items at a time and constantly context switching between tasks and we've spoken about that you know then it we've spoken about that you know then it we've spoken about that you know then it takes time to get back up to speed on the next task doesn't it and then they the next task doesn't it and then they the next task doesn't it and then they leave that one and then they go to the next task and then they have to get back up to speed on that one as well and all of that getting back up to speed is time lost and it also takes people out of the flow state you know if you if you're flow state you know if you if you're flow state you know if you if you're into deep work so you all of these things you many many different things i could talk about this for days if not weeks but we can't we haven't got time weeks but we can't we haven't got time weeks but we can't we haven't got time for for that right now. What will you do next?", "options": ["Help us visualize that work in progress so then we can", "Review the scope of the project and reduce items with low customer impact with low impact to customer satisfaction um i mean yes that's a good practice so that's that's a good practice so that's that's a good practice so that's actually a decent answer as well but i think the", "Option C", "Option D"], "correct": 1}, {"id": 95, "text": "Okay good and again a few different answers that could be correct there you will see that on the exam it can be a little bit tricky uh but we want to choose the best answer for us where there is too much work in progress or high rates of scrap it's recommended or high rates of scrap it's recommended or high rates of scrap it's recommended to use techniques like value stream mapping and can band boards to visualize the work identify the issues and propos solutions adding more people can also complicate communication and processes and you'll probably see that happen in and you'll probably see that happen in and you'll probably see that happen in your real life and career many many times page 151 in the pbot guide 7eventh edition under common situations and tailoring suggestions really really good stuff you notice that the pieces being completed are being rejected by the customer okay that's not so nice for the customer okay that's not so nice for the customer okay that's not so nice for defects and missed requirements. What will you do next?", "options": ["Take a long time usually or a longer time to figure out and get solutions for and then it's and get solutions for and then it's and get solutions for and then it's broken into pieces and those pieces", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 96, "text": "Question 96 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 97, "text": "Question 97 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 98, "text": "Question 98 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 99, "text": "Question 99 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 100, "text": "Question 100 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 101, "text": "If it's chaotic and complex environments if it's chaotic and complex environments if it's chaotic same as the other model we need to stabilize it and bring it back into that middle realm so with then we can use those agile methods page 165 under stacy matrix in the pumbo guide 7eventh edition wonderful stuff we're getting edition wonderful stuff we're getting edition wonderful stuff we're getting pretty deep here so this is pretty good you so we've all met that's good now you so we've all met that's good now you notice that there's some conflict in the notice that there's some conflict in the notice that there's some conflict in the team okay good uh you know we're going team okay good uh you know we're going team okay good uh you know we're going through that forming storming norming performing you know those phases of a team some people don't respect others team some people don't respect others team some people don't respect others decisions and are not working together well and there are some personality clashes within the team what are we going to do next okay uh let's see what going to do next okay uh let's see what going to do next okay uh let's see what we've got here help team members get to we've got here help team members get to we've got here help team members get to know each other their names i feel like they were introduced so we sort of we know each other i think we're past that know each other i think we're past that know each other i think we're past that hel", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 102, "text": "Okay you know i got lucky there but how did you guys go um and i certainly learned something at the end of that as well which is definitely the main thing that's really definitely the main thing that's really definitely the main thing that's really really good you believe you've captured all result you believe you've captured all result you believe you've captured all the items required your program manager asks you to handle the situation and approach it from look at that a win-win approach it from look at that a win-win approach it from look at that a win-win perspective. What will you do next?", "options": ["Escalate the decision to the steering committee to", "Option B", "Option C", "Option D"], "correct": 1}, {"id": 103, "text": "When there is mature character trust and the ability to approach it from the others point of view so there it is directly from the perot guide sth edition page 169 under negotiation um and also nice that they threw in the the seven habits of highly affected people so there i finally remembered it excellent and we're nearly done we're excellent and we're nearly done we're excellent and we're nearly done we're only got four to go in this little section you're doing an amazing job guys section you're doing an amazing job guys section you're doing an amazing job guys keep going you have been planning a project to deliver a process change for the past 4 weeks the requirements and scope have been signed off by the business owner and the team are moving into delivery and execution the work begins in line with the project plan and scope. What will you do next?", "options": ["Monitor and control that purposes let's", "Monitor and control that work make sure that it stays on track make sure it meets its goals let's go make sure it meets its goals let's go make sure it meets its goals", "Option C", "Option D"], "correct": 0}, {"id": 104, "text": "If you've been been through that so much if you've been been through that so much if you've been through the waterfall questions you will know that back to front so the project management process groups are initiating planning executing monitoring and controlling and closing there may be they may be performed in sequence or they might be iterated on um you know or they might be done all at once for one increment if you're working in agile increment if you're working in agile increment if you're working in agile they're applicable in every scenario as they're applicable in every scenario as they're applicable in every scenario as project work is executed it's then it project work is executed it's then it project work is executed it's then it then needs to be monitored and controlled page 170 under processed groups in the perot guide 7th edition wonderful stuff how did you guys go for that one you know this is something this is a good lesson for us all because revenue uh and sales is not the same as profit so the money that we get to take is the profit and so in between that is all of our cost so all of our operating costs people costs system costs and that takes away from uh from the revenue and turns it into what we've got left which turns it into what we've got left which turns it into what we've got left which is our profit so you'll hear a lot of is our profit so you'll hear a lot of is our profit so you'll hear a lot of people saying oh i made a million dollars in sales o", "options": ["Keep going even when things get difficult or complex so let's put a get difficult or complex so let's put a get difficult or complex so let's put a no for that one for now", "Keep that sustainable pace we don't want peaks and sustainable pace we don't want peaks and sustainable pace we don't want peaks and troughs uh we don't want hurry up and troughs uh we don't want hurry up and troughs uh we don't want hurry up and", "Wait so let's put a no wait hurry up and", "Wait hurry up and wait so let's put a no"], "correct": 3}, {"id": 105, "text": "Question 105 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 106, "text": "Question 106 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 107, "text": "Question 107 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 108, "text": "Question 108 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 109, "text": "Question 109 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 110, "text": "Question 110 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 111, "text": "You have been asked to help facilitate a senior planning meeting in your organization a high high level executives have made a presentation on the strengths and opportunities of the organization so strengths oh this sounds like swat strengths opportunities weaknesses and threats painting a rosy picture uh re revenue has fallen recently and the chief executive asks you to level out their analysis with a more complete view what will you do next okay so we've view what will you do next okay so we've view what will you do next okay so we've got the strengths and opportunities how do we level that out we need the weaknesses and the threats as well we need that whole picture i think unless i'm off track there but let's see if i'm off track there but let's see if i'm off track there but let's see if there's something like that in the there's something like that in the there's something like that in the answers add your organizations competitors and compare their products um competitors could be something around there with our threats or our you know maybe let's put a low maybe for now maybe let's put a low maybe for now maybe let's put a low maybe for now showcase the pipeline of upcoming work to be delivered in the next quarter not sure if that's relevant here especially sure if that's relevant here especially sure if that's relevant here especially for what we're after let's put a sort of for what we're after let's put a sort of for what we're after let's put a sort of a no for th", "options": ["Guide so maybe it's going to that as a", "Guide so maybe it's going to be that let's have a look use relative be that let's have a look use relative be that let's have a look use relative estimating so relative estimating is when we", "Have the smallest piece of of work that we could do and that we", "Option D"], "correct": 1}, {"id": 112, "text": "When the effort on a feature or deliverable needs to be estimated and there are people who have experience delivering a similar item you can use analogous estimating like i said it's an it's an analogy it's similar to it's an it's an analogy it's similar to it's an it's an analogy it's similar to something else uh so we can estimate the effort quickly and with a medium level of accuracy because they've already done of accuracy because they've already done of accuracy because they've already done it in the past page 178 estimating analogous estimating in the pach guide 7th edition wow you have a prioritized backlog of features okay very agile again so lots of agile questions here you have decomposed the next feature to be delivered into user stories okay backlog of features decompose them into user stories and that can go into a sprint or multiple sprints uh to complete a sprint of two weeks so that's good the team of two weeks so that's good the team of two weeks so that's good the team would like to estimate the effort involved on those user stories but are unsure on how to proceed. What will you do next?", "options": ["Guide i don't think but fibonacci is 1 2", "Show the that's just the way to show the that's just the way to", "Show the that's just the way to show the increasing complexity as things get bigger but uh what are we going to do here for user stories", "Option D"], "correct": 2}, {"id": 113, "text": "You're doing a great job how did you go you're doing a great job how did you go with that one i think that was pretty good let's see what we have next you are good let's see what we have next you are good let's see what we have next you are halfway through your current sprint of 2 weeks the work is progressing well however you notice that there's not however you notice that there's not however you notice that there's not enough work ready and elaborated for when the next sprint begins while. What will you do next?", "options": ["Raise the issue as a blocker in the daily standup and", "Raise the issue in the next retrospective and", "Option C", "Option D"], "correct": 0}, {"id": 114, "text": "You're doing great let's do this you you're doing great let's do this you you're doing great let's do this you have completed a make or buy analysis in your project and found that part of your deliverable is best created by an external vendor sounds like a procurement happening so this is good these can be a little bit uh complex as well so we'll see how we go you work well so we'll see how we go you work well so we'll see how we go you work with your project team to create the procurement strategy source selection criteria and statement of work so the selection criteria is we know the reasons why we're going to select reasons why we're going to select reasons why we're going to select someone so this is this is good uh and what are we going to do next so we've what are we going to do next so we've what are we going to do next so we've got our strategy as well which is good um so gather the seller proposals including technical details and price uh seller proposals i think we need sellers first actually so we've got our source first actually so we've got our source first actually so we've got our source selection criteria we need to find out who our sellers might be or could be meet with prospective sellers could be good to ensure all vendors have a common understanding of the procurement that could be good let's put that as a maybe could be good let's put that as a maybe could be good let's put that as a maybe for now perform source selection on analysis on what you want from", "options": ["Work with that gather feedback from other stakeholders to see they also need the", "Change request let's leave raised the", "Request let's leave raised the change", "Note the change in the change log yep then"], "correct": 0}, {"id": 115, "text": "The team works on uh oh it depends on our situation do we have a product owner because the product owner needs to put that you know choose what to work on the highest value item or you know what needs to be delivered next um so if we're just inviting all of these we're just inviting all of these we're just inviting all of these stakeholders it's going to end up in a stakeholders it's going to end up in a stakeholders it's going to end up in a bit of a messy situation potentially let's put a no for that one for now let's put a no for that one for now let's put a no for that one for now invite them to the retrospective so they can raise their issue there and come up with a with a with a solution um that's a maybe they're not solution um that's a maybe they're not solution um that's a maybe they're not really part of the core team and really it's just to improve the core team's it's just to improve the core team's it's just to improve the core team's process so that's probably not the best process so that's probably not the best process so that's probably not the best one uh okay last one actually looks pretty good invite them to the iteration review so the sprint review so they can see the usable increment that the team delivers this is when we demonstrate what we delivered in that sprint and we demonstrate it to our customers to our stakeholders to anyone outside the team who wants to see a usable feature that we have delivered and created during the sprint so now they can see", "options": ["Review meeting capture it as a risk and", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 116, "text": "Question 116 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 117, "text": "Question 117 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 118, "text": "Question 118 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 119, "text": "Question 119 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 120, "text": "Question 120 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 121, "text": "You are an agile project manager and your team have delivered three features to improve a customer app over the last 3 months your product owner needs to know if the features are having the desired effect it's a large organization and there are it's a large organization and there are it's a large organization and there are multiple measures available okay. What will you do next?", "options": ["Recommend this to a friend or something similar that's that sort of something similar that's that sort of something similar that's that sort of question um it's a great customer question um it's a great customer question um it's a great customer measure uh and then you", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 122, "text": "If you can help them deliver a website as part of your work. What will you do next?", "options": ["Raise the request as an issue in your project's issue log well i mean your project's issue log well i mean your project's issue log well i mean maybe there's a way we can work through maybe there's a way we can work through maybe there's a way we can work through it first", "Request as an issue in your project's issue log well i mean your project's issue log well i mean your project's issue log well i mean maybe there's a way we can work through maybe there's a way we can work through maybe there's a way we can work through it first", "Add the website to your project scope and", "Raise a see if there's a better option"], "correct": 3}, {"id": 123, "text": "Your organization from frontline staff to executives to customer re to to direct customer research as well. What will you do next?", "options": ["Add all of the items into your product backlog and work on the ones from the managers first tempting to do we want to", "Keep those managers happy but again we want to", "Prioritize based on the best benefit and the lowest cost ideally or the lowest effort so let's ideally or the lowest effort so let's ideally or the lowest effort so let's put a no for now", "Work with the requesters and your tech technical experts okay that sounds promising so we're getting everyone together to we're getting everyone together to we're getting everyone together to"], "correct": 0}, {"id": 124, "text": "The team improve the engagement of the team what will we do next okay set a team goal for them to be more engaged in the work over the next 3 months potentially yeah um i mean goals the the the what are we doing that's pretty good create a are we doing that's pretty good create a are we doing that's pretty good create a product vision statement showing the value you're bringing and the why behind value you're bringing and the why behind value you're bringing and the why behind the work now that's really good so the work now that's really good so the work now that's really good so that's part of us creating the team that's part of us creating the team that's part of us creating the team charter so roles and responsibilities plus that that product vision statement so that actually could be very good ask the team to contribute more to all pieces of work during each team meeting um i don't think that's really what um i don't think that's really what um i don't think that's really what we're talking about here you know uh so we're talking about here you know uh so we're talking about here you know uh so maybe that's something for a different maybe that's something for a different maybe that's something for a different time but not as part of us creating a team charter raise it as a people issue for your project and manage it with the project steering committee um so you know i think we are managing it ourselves and i don't think we need to ourselves and i don't think we need to ou", "options": ["Add a we've got five weeks do we want to", "Note the estimate of 5 weeks and update the assumption log okay well that's good uh with the technical that's good uh with the technical that's good uh with the technical assumption that the languages and layout is the same so that actually could be pretty good um i wonder if we", "Add a little bit of time in there but let's little bit of time in there but let's little bit of time in there but let's put a maybe for that one for now don't put a maybe for that one for now don't put a maybe for that one for now don't", "Option D"], "correct": 0}, {"id": 125, "text": "During a brainstorming session one of your customers comes up with a new feature idea you check the benefit and the benefit is high the complexity is also low so this is exactly what we're after high benefit uh exactly what we're after high benefit uh exactly what we're after high benefit uh low cost or complexity so this is this is good uh. What will you do next?", "options": ["Add money to your budget to accommodate the additional feature as soon as possible maybe um but on an agile project we usually have a fixed budget and fixed budget and fixed budget and fixed time um and then we have a variable scope so the scope can", "Create a business case for the new feature outlining the benefit and costs involved well i think we already", "Option C", "Option D"], "correct": 2}, {"id": 126, "text": "You are doing a amazing work okay one of the senior users testing your product has found that it was missing a key requirement that he had assumed would be there it was not noted in the project scope which has been baselined already you check the impact to cost and schedule raise a change request on his behalf so this is great good good process here and you take it to the change control board where it is approved hey this is do we need to do anything else i'm not sure uh need to do anything else i'm not sure uh need to do anything else i'm not sure uh so that sounds pretty good do we just work on it now what. What will you do next?", "options": ["Place the new requirement into the sprint backlog for the next sprint um i think we need to turn it into acceptance criteria and actual user stories first so we can't just", "Place the requirement so we can't just", "Place the requirement in there we have to elaborate on it and uh and figure out what the actual work is first do we", "Add the mist requirement to the issue log and solve and problem solve with your team to"], "correct": 3}, {"id": 127, "text": "You're working on a hybrid is you have you're working on a hybrid is you have you're working on a hybrid project to replace an aging customer system that has just had a feature upgrade release the senior developer raises a concern during the daily standup that the system doesn't seem to standup that the system doesn't seem to standup that the system doesn't seem to be able to connect to some parts of the organization after the upgrade okay so we've had an upgrade uh and then now we've had an upgrade uh and then now we've had an upgrade uh and then now it's it's broken something by the looks it's it's broken something by the looks it's it's broken something by the looks of it okay. What will you do next?", "options": ["Assign it to a responsible party absolutely and", "Raise the concern as a risk and brainstorm risk responses it's already happened so it's more of an it's already happened so it's more of an it's already happened so it's more of an issue", "Raise it in the issue log as well so that's still the issue log as well so that's still the issue log as well so that's still the", "Option D"], "correct": 1}, {"id": 128, "text": "Question 128 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 129, "text": "Question 129 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 130, "text": "Question 130 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 131, "text": "You're working on an agile can do it you're working on an agile can do it you're working on an agile project where your project team have raised multiple risks to project delivery some of these risks may impact your cost and schedule significantly your program manager asks you to manage them using a risk adjusted backlog what will you do next okay looks like this is just a question about a risk adjusted backlog so what is that it's where we backlog so what is that it's where we backlog so what is that it's where we take our risks and we place them into backlog of work and we prioritize them against all of the other items as as well so make sure that we end up doing them in uh you know in in the sprints as we're going along on our work uh so it's we're going along on our work uh so it's we're going along on our work uh so it's not just normal work now we include risks as well it's risk adjusted we're risks as well it's risk adjusted we're risks as well it's risk adjusted we're including risk in our backlog let's see including risk in our backlog let's see including risk in our backlog let's see what we've got here adjust your risk what we've got here adjust your risk what we've got here adjust your risk register to include the work not completed if the risks are triggered i think no backlog in there so we'll say think no backlog in there so we'll say think no backlog in there so we'll say no adjust your backlog velocity o close we've got that nice word but velocity we've got t", "options": ["Perform stakeholder engagement perform stakeholder engagement", "Ensure their details are are recorded and where they fit before we", "Take further action that's very good all", "Option D"], "correct": 0}, {"id": 132, "text": "You are a product right let's keep going you are a product right let's keep going you are a product owner on an agile project and you've owner on an agile project and you've owner on an agile project and you've created a product backlog of features in a prioritized order for delivery okay that sounds pretty good that's what that sounds pretty good that's what that sounds pretty good that's what we're supposed to do so that's great you we're supposed to do so that's great you we're supposed to do so that's great you ask the team to break down the first feature into user stories and estimate their effort. What will you do next?", "options": ["Create an iteration plan with your team and the iteration is a sprint so same terminology similar terminology um so sprint uh", "Plan with your team and the iteration is a sprint so same terminology similar terminology um so sprint uh", "Plan with your team we take all that information we", "Plan the we can't do that until we"], "correct": 0}, {"id": 133, "text": "When some of this value will be delivered and the expected outcomes of each. What will you do next?", "options": ["Show the right track that's at least", "Show the features at the next sprint", "Place the features on a release plan and", "Option D"], "correct": 1}, {"id": 134, "text": "Okay forward view let's go with answer b okay forward view let's go with answer b okay you need to find out exactly what the project customer needs so you can find a solution and make it happen your business analysts are new to their roles and they're not sure what their process and they're not sure what their process and they're not sure what their process will be. What will you do next?", "options": ["Plan so we need a requirements management", "Create the project management plan to", "Work with the that's what we're after work with the that's what we're after", "Work with the business analyst to create a requirements management"], "correct": 2}, {"id": 135, "text": "You're doing great let's keep going you're doing great let's keep going you're doing great you're working on a new software you're working on a new software you're working on a new software application with a lot of complex interdependencies the senior user providing and testing most of the requirements is concerned that some of those dependencies will cause air er upon release if they're not checked upon release if they're not checked upon release if they're not checked thoroughly what will you do next okay senior user is doing a lot of the testing h interesting um and so we've testing h interesting um and so we've testing h interesting um and so we've got requirements and in interdependencies um and that they're interdependencies um and that they're interdependencies um and that they're going to cause errors when the product is released okay wow this is there's a is released okay wow this is there's a is released okay wow this is there's a lot of information here so potentially a lot of things we could do ask the senior user for a written list of all his requirements then check if they're requirements then check if they're requirements then check if they're included in the project scope um is that going to figure out the dependencies or you know help manage the testing i'm not you know help manage the testing i'm not you know help manage the testing i'm not sure probably not let's put an no for sure probably not let's put an no for sure probably not let's put an no for now ", "options": ["Create a product breakdown structure with your team that could definitely work uh now this piece is related to this piece over here etc so it could be good uh", "Create the risk breakdown structure with your project team uh similar but not as good", "Option C", "Option D"], "correct": 0}, {"id": 136, "text": "Okay you have just finished breaking down the scope with your project team that will meet your customers requirements your program manager wishes to control the scope the project scope control the project scope so any changes go through the proper process uh. What will you do next?", "options": ["Plan with a rule minimizing changes that's the process of minimizing changes that's the process of minimizing changes that's the process of scope management uh but we need to know how what is the baseline what does it look like i think that goes into the configuration management", "Option B", "Option C", "Option D"], "correct": 1}, {"id": 137, "text": "The team are tracking towards their sprint goal. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 138, "text": ". What will you do next?", "options": ["Take our risks and we place them into backlog of work and we", "Place them into backlog of work and we", "Adjust your risk what we've got here", "Adjust your risk register to include the work not completed if the risks are triggered i think no backlog in there so we'll say think no backlog in there so we'll say think no backlog in there so we'll say no"], "correct": 0}, {"id": 139, "text": ". What will you do next?", "options": ["Show the risk management plan that's the", "Plan that's the show the risk management", "Show the risk management plan that's the risk process so how are we gathering and you know and managing risks", "Plan that's the risk process so how are we gathering and you know and managing risks"], "correct": 0}, {"id": 140, "text": ". What will you do next?", "options": ["Perform stakeholder engagement perform stakeholder engagement", "Ensure their details are are recorded and where they fit before we", "Take further action that's very good all", "Option D"], "correct": 0}, {"id": 141, "text": "And i know you can do it your agile project has recently been merged into a larger program and the program manager is reviewing how the project is tracking she asks you how much has been completed in design but also how much has been completed in development testing and sign off. What will you do next?", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 2}, {"id": 142, "text": "You guys that's really good news how did you guys that's really good news you believe the user stories are moving slower now as a result but you can't be sure what will result but you can't be sure what will result but you can't be sure. What will you do next?", "options": ["Release dates i don't think that's going to give us the don't think that's going to give us the don't think that's going to give us the user story you know how much how long they're taking", "Review the points in the they're taking", "Review the points in the sprint backlog versus the last three sprints velocity that could give us a bit of an idea of how the team is tracking as a whole but not just for the individual story cards so for our purposes i think", "Option D"], "correct": 0}, {"id": 143, "text": "If you've got days so 10 days for know if you've got days so 10 days for know if you've got days so 10 days for examp example zero days here and an item's completed here here it's sort of item's completed here here it's sort of item's completed here here it's sort of a scatter chart and then it will usually give you a bit of an average over time so that's your cycle time of all of so that's your cycle time of all of so that's your cycle time of all of those user stories uh and again many programs will have that information that you can extract a chart from pretty pretty well you know this is good to be going through you're working on an be going through you're working on an be going through you're working on an agile project with a full product road map for the next 6 months your project team are not sure what the next feature does or how they should turn it into user stories. What will you do next?", "options": ["Plan so we can't do that yet perform a can't do that yet", "Perform a can't do that yet perform a can't do that yet", "Perform a can't do that yet perform a retrospective with your team at the end of the retrospective then we check in and we", "Perform a retrospective with your team at the end of the retrospective then we check in and we"], "correct": 1}, {"id": 144, "text": "You're a program manager on a large you're a program manager on a large you're a program manager on a large scale agile program where each project team has its own scrum master you need to know the rate at which work is flowing through each team so you can see if there are any blockers or issues and whether they will remain on track. What will you do next?", "options": ["Review of each team at the end of each sprint that could work um yep i mean that's that will", "Show what was completed that's that will", "Show what was completed i suppose but will it give us the rate of work maybe not it's just a of work maybe not it's just a of work maybe not it's just a demonstration um", "Review the schedule management plan for managing the"], "correct": 3}, {"id": 145, "text": "You tell him but he wants more information. What will you do next?", "options": ["Show him the project management plan including the", "Plan including the schedule management", "Schedule and how we're these things the", "Review the status report okay that's"], "correct": 2}, {"id": 146, "text": "If we can contract we don't know if we can contract we don't know if we can actually bring an external vendor in house uh so you know there's all sorts house uh so you know there's all sorts house uh so you know there's all sorts of complexities around that it could get very messy i think the simplest easiest way uh still agile centric let's go with way uh still agile centric let's go with way uh still agile centric let's go with answer answer answer b okay you need to budget for the materials required however the volume of materials may change significantly as the project evolves. What will you do next?", "options": ["Guide perspective so i mean there are a few contracts here", "Change for us so we can't put going to", "Ensure a so supplier for your materials or", "Change the price might change as well so that's price might"], "correct": 0}, {"id": 147, "text": "If we already have their information um we already have a list of acceptable sellers so that's list of acceptable sellers so that's list of acceptable sellers so that's actually pretty good we're fine with actually pretty good we're fine with actually pretty good we're fine with both of those request for quotation if it's pretty straightforward maybe we it's pretty straightforward maybe we it's pretty straightforward maybe we just need a price so that could be quite good hold a bid's conf conference to good hold a bid's conf conference to good hold a bid's conf conference to ensure all sellers are on the same page um again i think we have that list of acceptable sellers so we're pretty good acceptable sellers so we're pretty good acceptable sellers so we're pretty good there for our purposes i think it's there for our purposes i think it's there for our purposes i think it's straightforward enough that we can just get a quote uh for a price let's go with get a quote uh for a price let's go with get a quote uh for a price let's go with with answer c okay you go with that one we're certainly into go with that one we're certainly into go with that one we're certainly into this procurement and vendors uh part of the pach guide that's for sure so lots the pach guide that's for sure so lots the pach guide that's for sure so lots of really good information we're getting of really good information we're getting of really good information we're getting here okay last two let's do this", "options": ["Place in a sprint so this one now we've", "Place in a sprint so this one now we've broken it down into uh you know similar to work packages items that a person can work on uh and we", "Option C", "Option D"], "correct": 1}, {"id": 148, "text": "Question 148 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 149, "text": "Question 149 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}, {"id": 150, "text": "Question 150 — review in the source video.", "options": ["Option A", "Option B", "Option C", "Option D"], "correct": 0}];
+
+    // Official PMP: 180 questions, 230 min, 3×60-question sections, optional 10-min breaks after q60 & q120
+    const EXAM_CONFIG = {
+      questions: 150,
+      totalMs: Math.round((230 * 60 * 1000 * 150) / 180),
+      sectionQuestions: Math.round((60 * 150) / 180),
+      breakMinutes: 10,
+      breakMs: 10 * 60 * 1000,
+    };
+    const BREAK_CHECKPOINTS = [
+      EXAM_CONFIG.sectionQuestions,
+      EXAM_CONFIG.sectionQuestions * 2,
+    ];
+
+    const STORAGE_KEY = "pmp_mock_150_v1";
+    const EXAM_PASSWORD = "madhu8087";
+    let pendingStartCallback = null;
+
+    let state = {
+      answers: {},
+      flags: {},
+      current: 0,
+      startedAt: null,
+      examDeadline: null,
+      breaksSkipped: [],
+      submitted: false,
+      reviewMode: false,
+      onBreak: false,
+      breakEndsAt: null,
+      remainingAtBreakStart: null,
+      pendingBreakCheckpoint: null,
+      paused: false,
+      remainingWhenPaused: null,
+    };
+    let timerInterval = null;
+    let breakInterval = null;
+    let saveFeedbackTimer = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function migrateState(s) {
+      if (s.startedAt && !s.examDeadline && !s.submitted) {
+        s.examDeadline = s.startedAt + EXAM_CONFIG.totalMs;
+      }
+      if (!Array.isArray(s.breaksSkipped)) s.breaksSkipped = [];
+      if (s.paused == null) s.paused = false;
+      return s;
+    }
+
+    function updateWelcomeButtons() {
+      const show = hasSavedProgress();
+      $("resumeBtn").style.display = show ? "inline-flex" : "none";
+      $("resetProgressBtn").style.display = show ? "inline-flex" : "none";
+      $("resumeBtn").textContent = state.paused ? "Resume paused exam" : "Resume";
+    }
+
+    function resetProgress() {
+      const msg = state.submitted
+        ? "Clear your results and start a fresh exam? All answers and scores will be removed."
+        : "Clear all saved progress and restart from the beginning? This cannot be undone.";
+      if (!confirm(msg)) return;
+      resetExam();
+      showScreen("welcome");
+      updateWelcomeButtons();
+      updatePausedWelcome();
+    }
+
+    function updatePausedWelcome() {
+      const el = $("pausedStatus");
+      if (!state.paused || state.submitted) {
+        el.hidden = true;
+        return;
+      }
+      el.hidden = false;
+      el.innerHTML =
+        `<strong>Exam paused.</strong> ${answeredCount()}/150 answered, ` +
+        `<strong>${formatTime(getRemainingMs())}</strong> remaining. ` +
+        `Progress is saved in this browser — click <strong>Resume paused exam</strong> to continue.`;
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const merged = migrateState({ ...state, ...parsed });
+          if (parsed.startedAt && !parsed.examDeadline && merged.examDeadline && !merged.submitted) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+          }
+          return merged;
+        }
+      } catch (_) {}
+      return migrateState({ ...state });
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function saveStateWithFeedback() {
+      saveState();
+      const el = $("saveStatus");
+      if (!el || state.reviewMode || state.submitted) return;
+      el.hidden = false;
+      el.textContent = "Saved";
+      el.classList.add("visible");
+      clearTimeout(saveFeedbackTimer);
+      saveFeedbackTimer = setTimeout(() => {
+        el.classList.remove("visible");
+        setTimeout(() => {
+          if (!el.classList.contains("visible")) el.hidden = true;
+        }, 250);
+      }, 1800);
+    }
+
+    function hasSavedProgress() {
+      return (
+        !state.submitted &&
+        (state.paused || answeredCount() > 0 || state.startedAt != null)
+      );
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+      $(id).classList.add("active");
+      $("headerStats").hidden = id === "welcome";
+      $("sectionBadge").hidden = id !== "exam" || state.reviewMode;
+    }
+
+    function formatTime(ms) {
+      const s = Math.max(0, Math.floor(ms / 1000));
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      return [h, m, sec].map((n) => String(n).padStart(2, "0")).join(":");
+    }
+
+    function formatBreakTime(ms) {
+      const s = Math.max(0, Math.ceil(ms / 1000));
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return `${m}:${String(sec).padStart(2, "0")}`;
+    }
+
+    function initExamTimer() {
+      const now = Date.now();
+      state.startedAt = state.startedAt || now;
+      if (!state.examDeadline) state.examDeadline = state.startedAt + EXAM_CONFIG.totalMs;
+    }
+
+    function getRemainingMs() {
+      if (state.paused && state.remainingWhenPaused != null) {
+        return state.remainingWhenPaused;
+      }
+      if (!state.examDeadline) return EXAM_CONFIG.totalMs;
+      return Math.max(0, state.examDeadline - Date.now());
+    }
+
+    function updateTimerDisplay() {
+      const el = $("timer");
+      if (state.reviewMode || state.submitted) {
+        el.textContent = "--:--:--";
+        el.className = "timer";
+        return;
+      }
+      const remaining = getRemainingMs();
+      el.textContent = formatTime(remaining);
+      el.classList.remove("warning", "critical");
+      if (remaining <= 5 * 60 * 1000) el.classList.add("critical");
+      else if (remaining <= 15 * 60 * 1000) el.classList.add("warning");
+    }
+
+    function updateSectionBadge() {
+      const badge = $("sectionBadge");
+      if (state.reviewMode || state.submitted) {
+        badge.hidden = true;
+        return;
+      }
+      const qid = QUESTIONS[state.current].id;
+      const section = qid <= BREAK_CHECKPOINTS[0] ? 1 : qid <= BREAK_CHECKPOINTS[1] ? 2 : 3;
+      badge.textContent = `Section ${section} of 3`;
+      badge.hidden = false;
+    }
+
+    function offerBreak(checkpoint) {
+      state.pendingBreakCheckpoint = checkpoint;
+      const nextSection = checkpoint === BREAK_CHECKPOINTS[0] ? 2 : 3;
+      $("breakTitle").textContent =
+        checkpoint === BREAK_CHECKPOINTS[0]
+          ? "Optional break — after Section 1"
+          : "Optional break — after Section 2";
+      $("breakDesc").textContent =
+        `You have completed ${checkpoint} questions and are entering Section ${nextSection}. ` +
+        `On the real PMP exam you may take an optional ${EXAM_CONFIG.breakMinutes}-minute break here. ` +
+        `The exam countdown pauses while you are on break.`;
+      $("breakTimer").textContent = formatBreakTime(EXAM_CONFIG.breakMs);
+      $("startBreakBtn").style.display = "";
+      $("breakOverlay").classList.add("active");
+    }
+
+    function dismissBreakOffer() {
+      if (state.pendingBreakCheckpoint != null) {
+        state.breaksSkipped.push(state.pendingBreakCheckpoint);
+        state.pendingBreakCheckpoint = null;
+      }
+      $("breakOverlay").classList.remove("active");
+      saveState();
+    }
+
+    function startBreak() {
+      const checkpoint = state.pendingBreakCheckpoint;
+      if (checkpoint == null) return;
+      if (!state.breaksSkipped.includes(checkpoint)) state.breaksSkipped.push(checkpoint);
+      state.remainingAtBreakStart = getRemainingMs();
+      state.onBreak = true;
+      state.breakEndsAt = Date.now() + EXAM_CONFIG.breakMs;
+      state.pendingBreakCheckpoint = null;
+      $("startBreakBtn").style.display = "none";
+      clearInterval(breakInterval);
+      breakInterval = setInterval(() => {
+        const left = state.breakEndsAt - Date.now();
+        $("breakTimer").textContent = formatBreakTime(left);
+        if (left <= 0) endBreak();
+      }, 250);
+      saveState();
+    }
+
+    function endBreak() {
+      clearInterval(breakInterval);
+      breakInterval = null;
+      if (state.remainingAtBreakStart != null) {
+        state.examDeadline = Date.now() + state.remainingAtBreakStart;
+      }
+      state.onBreak = false;
+      state.breakEndsAt = null;
+      state.remainingAtBreakStart = null;
+      $("breakOverlay").classList.remove("active");
+      saveState();
+      startTimer();
+    }
+
+    function checkBreakPrompt(q) {
+      if (state.reviewMode || state.submitted || state.onBreak || state.paused) return;
+      if (q.id === BREAK_CHECKPOINTS[0] + 1 && !state.breaksSkipped.includes(BREAK_CHECKPOINTS[0])) {
+        offerBreak(BREAK_CHECKPOINTS[0]);
+      } else if (q.id === BREAK_CHECKPOINTS[1] + 1 && !state.breaksSkipped.includes(BREAK_CHECKPOINTS[1])) {
+        offerBreak(BREAK_CHECKPOINTS[1]);
+      }
+    }
+
+    function pauseExam() {
+      if (state.submitted || state.reviewMode) return;
+      let remaining = getRemainingMs();
+      if (state.onBreak && state.remainingAtBreakStart != null) {
+        remaining = state.remainingAtBreakStart;
+      }
+      stopTimer();
+      state.onBreak = false;
+      state.breakEndsAt = null;
+      state.remainingAtBreakStart = null;
+      state.pendingBreakCheckpoint = null;
+      $("breakOverlay").classList.remove("active");
+      state.remainingWhenPaused = remaining;
+      state.paused = true;
+      saveState();
+      updateWelcomeButtons();
+      updatePausedWelcome();
+      showScreen("welcome");
+    }
+
+    function resumeExam() {
+      if (state.submitted) return;
+      if (getRemainingMs() <= 0) {
+        submitExam(true);
+        return;
+      }
+      if (state.remainingWhenPaused != null) {
+        state.examDeadline = Date.now() + state.remainingWhenPaused;
+      }
+      state.paused = false;
+      state.remainingWhenPaused = null;
+      state.reviewMode = false;
+      saveState();
+      updatePausedWelcome();
+      showScreen("exam");
+      if (state.onBreak && state.breakEndsAt && state.breakEndsAt > Date.now()) {
+        $("breakOverlay").classList.add("active");
+        $("startBreakBtn").style.display = "none";
+        clearInterval(breakInterval);
+        breakInterval = setInterval(() => {
+          const left = state.breakEndsAt - Date.now();
+          $("breakTimer").textContent = formatBreakTime(left);
+          if (left <= 0) endBreak();
+        }, 250);
+      } else {
+        startTimer();
+      }
+      renderQuestion();
+    }
+
+    function startTimer() {
+      if (state.reviewMode || state.submitted || state.onBreak || state.paused) return;
+      initExamTimer();
+      clearInterval(timerInterval);
+      updateTimerDisplay();
+      updateSectionBadge();
+      timerInterval = setInterval(() => {
+        if (state.onBreak) return;
+        updateTimerDisplay();
+        if (getRemainingMs() <= 0) {
+          clearInterval(timerInterval);
+          alert("Time is up — your exam will be submitted automatically (same as the real PMP exam).");
+          submitExam(true);
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      clearInterval(breakInterval);
+      timerInterval = null;
+      breakInterval = null;
+    }
+
+    function answeredCount() {
+      return Object.keys(state.answers).length;
+    }
+
+    function renderQuestion() {
+      const q = QUESTIONS[state.current];
+      $("qNum").textContent = q.id;
+      $("qText").textContent = q.text;
+      const list = $("options");
+      list.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+      q.options.forEach((opt, i) => {
+        const li = document.createElement("li");
+        li.className = "option";
+        const selected = state.answers[q.id] === i;
+        if (selected) li.classList.add("selected");
+        if (state.submitted || state.reviewMode) {
+          if (i === q.correct) li.classList.add("correct");
+          else if (selected) li.classList.add("incorrect");
+        }
+        li.innerHTML = `
+          <input type="radio" name="q" id="opt${i}" ${selected ? "checked" : ""} ${state.submitted ? "disabled" : ""} />
+          <span class="option-label">${letters[i]}.</span>
+          <span>${escapeHtml(opt)}</span>
+        `;
+        if (!state.submitted) {
+          li.addEventListener("click", () => selectAnswer(i));
+        }
+        list.appendChild(li);
+      });
+      $("flagBtn").classList.toggle("flagged", !!state.flags[q.id]);
+      $("flagBtn").textContent = state.flags[q.id] ? "Flagged" : "Flag for review";
+      $("progressFill").style.width = `${((state.current + 1) / 150) * 100}%`;
+      $("answeredCount").textContent = answeredCount();
+      renderGrid();
+      $("prevBtn").disabled = state.current === 0;
+      $("nextBtn").textContent = state.current === 149 ? "Finish" : "Next";
+      updateSectionBadge();
+      $("pauseBtn").hidden = state.reviewMode || state.submitted;
+      $("backToResultsBtn").hidden = !state.reviewMode;
+      $("resetExamBtn").hidden = state.reviewMode || state.submitted;
+      $("submitBtn").hidden = state.reviewMode;
+      checkBreakPrompt(q);
+    }
+
+    function escapeHtml(s) {
+      const d = document.createElement("div");
+      d.textContent = s;
+      return d.innerHTML;
+    }
+
+    function selectAnswer(i) {
+      if (state.submitted) return;
+      const qid = QUESTIONS[state.current].id;
+      state.answers[qid] = i;
+      saveStateWithFeedback();
+      renderQuestion();
+    }
+
+    function renderGrid() {
+      const grid = $("qGrid");
+      grid.innerHTML = "";
+      QUESTIONS.forEach((q, idx) => {
+        const b = document.createElement("button");
+        b.textContent = q.id;
+        b.type = "button";
+        if (state.answers[q.id] !== undefined) b.classList.add("answered");
+        if (state.flags[q.id]) b.classList.add("flagged");
+        if (idx === state.current) b.classList.add("current");
+        b.addEventListener("click", () => {
+          state.current = idx;
+          saveState();
+          renderQuestion();
+        });
+        grid.appendChild(b);
+      });
+      const currentBtn = grid.querySelector("button.current");
+      if (currentBtn) {
+        currentBtn.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    }
+
+    function submitExam(force = false) {
+      const unanswered = 150 - answeredCount();
+      if (!force && unanswered > 0) {
+        const ok = confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`);
+        if (!ok) return;
+      }
+      state.submitted = true;
+      state.paused = false;
+      state.remainingWhenPaused = null;
+      state.onBreak = false;
+      $("breakOverlay").classList.remove("active");
+      stopTimer();
+      saveState();
+      updateWelcomeButtons();
+      updatePausedWelcome();
+      showResults();
+    }
+
+
+    function explanationHtml(q) {
+      if (!q.explanation) return "";
+      return `<div class="explanation"><strong>Explanation</strong>${escapeHtml(q.explanation)}</div>`;
+    }
+
+    function videoLinkHtml(q) {
+      const url = q.videoUrl || (
+        q.videoId != null && q.videoSeconds != null
+          ? `https://www.youtube.com/watch?v=${q.videoId}&t=${q.videoSeconds}s`
+          : ""
+      );
+      if (!url) return "";
+      const label = q.videoTime
+        ? `Watch explanation in video (${q.videoTime})`
+        : "Watch explanation in source video";
+      return `<p class="video-link"><a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)} ↗</a></p>`;
+    }
+
+    function showResults() {
+      let correct = 0;
+      const wrongItems = [];
+      QUESTIONS.forEach((q) => {
+        const a = state.answers[q.id];
+        if (a === q.correct) correct++;
+        else wrongItems.push({ q, chosen: a });
+      });
+      const unanswered = 150 - answeredCount();
+      const pct = Math.round((correct / 150) * 100);
+      const passed = pct >= PASS_THRESHOLD;
+
+      $("scorePct").textContent = pct + "%";
+      $("passFail").textContent = passed ? "PASS" : "FAIL";
+      $("passMsg").textContent = passed
+        ? "Great work — you met the 70% target from the practice set."
+        : `You need ${PASS_THRESHOLD}% (105 correct) to pass. Keep practicing.`;
+      $("resultsHero").className = "results-hero " + (passed ? "pass" : "fail");
+      $("correctCount").textContent = correct;
+      $("wrongCount").textContent = 150 - correct - unanswered;
+      $("unansweredCount").textContent = unanswered;
+
+      const list = $("reviewList");
+      list.innerHTML = "";
+      if (wrongItems.length === 0) {
+        list.innerHTML = "<p style='padding:1rem;color:var(--muted);'>No incorrect answers.</p>";
+      } else {
+        wrongItems.forEach(({ q, chosen }) => {
+          const div = document.createElement("div");
+          div.className = "review-item";
+          const letters = ["A", "B", "C", "D"];
+          const chosenText =
+            chosen === undefined ? "No answer" : `Your answer: ${letters[chosen]}. ${q.options[chosen]}`;
+          div.innerHTML = `
+            <strong>Q${q.id}</strong>
+            <p style="margin:0.5rem 0;">${escapeHtml(q.text)}</p>
+            <p class="wrong">${escapeHtml(chosenText)}</p>
+            <p style="color:var(--success);margin-top:0.35rem;">Correct: ${letters[q.correct]}. ${escapeHtml(q.options[q.correct])}</p>
+            ${explanationHtml(q)}
+            ${videoLinkHtml(q)}
+          `;
+          list.appendChild(div);
+        });
+      }
+      showScreen("results");
+    }
+
+    function resetExam() {
+      state = {
+        answers: {},
+        flags: {},
+        current: 0,
+        startedAt: null,
+        examDeadline: null,
+        breaksSkipped: [],
+        submitted: false,
+        reviewMode: false,
+        onBreak: false,
+        breakEndsAt: null,
+        remainingAtBreakStart: null,
+        pendingBreakCheckpoint: null,
+        paused: false,
+        remainingWhenPaused: null,
+      };
+      $("breakOverlay").classList.remove("active");
+      updatePausedWelcome();
+      stopTimer();
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    function showPasswordGate(onSuccess) {
+      pendingStartCallback = onSuccess;
+      $("examPasswordInput").value = "";
+      $("passwordError").hidden = true;
+      $("passwordOverlay").classList.add("active");
+      $("examPasswordInput").focus();
+    }
+
+    function hidePasswordGate() {
+      $("passwordOverlay").classList.remove("active");
+      pendingStartCallback = null;
+    }
+
+    function tryPasswordAndContinue() {
+      if ($("examPasswordInput").value === EXAM_PASSWORD) {
+        const fn = pendingStartCallback;
+        hidePasswordGate();
+        if (fn) fn();
+      } else {
+        $("passwordError").hidden = false;
+        $("examPasswordInput").focus();
+        $("examPasswordInput").select();
+      }
+    }
+
+    function startNewExam() {
+      resetExam();
+      const now = Date.now();
+      state.startedAt = now;
+      state.examDeadline = now + EXAM_CONFIG.totalMs;
+      state.paused = false;
+      state.remainingWhenPaused = null;
+      saveState();
+      updatePausedWelcome();
+      showScreen("exam");
+      startTimer();
+      renderQuestion();
+    }
+
+    function init() {
+      state = loadState();
+      updateWelcomeButtons();
+      updatePausedWelcome();
+
+      $("startBtn").addEventListener("click", () => showPasswordGate(startNewExam));
+
+      $("passwordSubmitBtn").addEventListener("click", tryPasswordAndContinue);
+      $("passwordCancelBtn").addEventListener("click", hidePasswordGate);
+      $("examPasswordInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") tryPasswordAndContinue();
+        if (e.key === "Escape") hidePasswordGate();
+      });
+
+      $("startBreakBtn").addEventListener("click", startBreak);
+      $("skipBreakBtn").addEventListener("click", dismissBreakOffer);
+
+      $("resumeBtn").addEventListener("click", resumeExam);
+
+      $("pauseBtn").addEventListener("click", () => {
+        if (confirm("Pause the exam? The countdown will stop and your progress will be saved. You can resume later from this page.")) {
+          pauseExam();
+        }
+      });
+
+      $("prevBtn").addEventListener("click", () => {
+        if (state.current > 0) { state.current--; saveState(); renderQuestion(); }
+      });
+
+      $("nextBtn").addEventListener("click", () => {
+        if (state.current < 199) { state.current++; saveState(); renderQuestion(); }
+        else submitExam();
+      });
+
+      $("flagBtn").addEventListener("click", () => {
+        const qid = QUESTIONS[state.current].id;
+        state.flags[qid] = !state.flags[qid];
+        saveState();
+        renderQuestion();
+      });
+
+      $("submitBtn").addEventListener("click", () => submitExam());
+
+      $("resetProgressBtn").addEventListener("click", resetProgress);
+      $("resetExamBtn").addEventListener("click", resetProgress);
+
+      $("retryBtn").addEventListener("click", resetProgress);
+
+      $("reviewExamBtn").addEventListener("click", () => {
+        state.reviewMode = true;
+        state.current = 0;
+        stopTimer();
+        saveState();
+        showScreen("exam");
+        renderQuestion();
+      });
+
+      $("backToResultsBtn").addEventListener("click", () => {
+        state.reviewMode = false;
+        saveState();
+        showResults();
+      });
+
+      if (
+        !state.submitted &&
+        state.examDeadline &&
+        answeredCount() > 0 &&
+        getRemainingMs() <= 0
+      ) {
+        submitExam(true);
+      } else if (state.submitted) {
+        showResults();
+      } else if (state.paused) {
+        showScreen("welcome");
+      } else if (state.onBreak && state.breakEndsAt && state.breakEndsAt > Date.now()) {
+        showScreen("exam");
+        $("breakOverlay").classList.add("active");
+        $("startBreakBtn").style.display = "none";
+        clearInterval(breakInterval);
+        breakInterval = setInterval(() => {
+          const left = state.breakEndsAt - Date.now();
+          $("breakTimer").textContent = formatBreakTime(left);
+          if (left <= 0) endBreak();
+        }, 250);
+        renderQuestion();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
