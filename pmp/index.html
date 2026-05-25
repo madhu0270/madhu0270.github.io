@@ -4,18 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>mdhakite pmp labs</title>
+    <script>
+    (function () {
+      var t = localStorage.getItem("pmp-mock-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="pmp-theme.css" />
   <style>
-    :root {
-      --bg: #0f1419;
-      --surface: #1a2332;
-      --surface2: #243044;
-      --text: #e8eef4;
-      --muted: #8b9cb3;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --success: #22c55e;
-      --border: #334155;
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -88,7 +84,7 @@
     }
     .exam-card:hover {
       border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.08);
+      background: var(--accent-soft-alpha);
     }
     .exam-card:active {
       transform: scale(0.995);
@@ -113,7 +109,7 @@
       font-size: 0.75rem;
       font-weight: 600;
       color: var(--accent);
-      background: rgba(59, 130, 246, 0.12);
+      background: var(--accent-badge-alpha);
       padding: 0.2rem 0.55rem;
       border-radius: 4px;
       white-space: nowrap;
@@ -155,9 +151,12 @@
   </style>
 </head>
 <body>
-  <header>
+  <header style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+    <div>
     <h1><span class="brand">mdhakite</span> pmp labs</h1>
     <p>Practice exams for personal study · Pass target 70%</p>
+    </div>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" title="Light mode">&#9728;</button>
   </header>
 
   <main>
@@ -208,5 +207,6 @@
   <footer class="site-footer">
     <p>&copy; Developed by Madhusudan Dhakite</p>
   </footer>
+  <script src="pmp-theme.js"></script>
 </body>
 </html>

@@ -4,20 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PMP Mock Exam — 200 Ultra Hard Questions</title>
+    <script>
+    (function () {
+      var t = localStorage.getItem("pmp-mock-theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="pmp-theme.css" />
   <style>
-    :root {
-      --bg: #0f1419;
-      --surface: #1a2332;
-      --surface2: #243044;
-      --text: #e8eef4;
-      --muted: #8b9cb3;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --border: #334155;
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -98,11 +92,11 @@
       background: var(--surface2);
       border: 1px solid var(--border);
     }
-    .q-grid-legend i.answered { background: #1e3a5f; border-color: var(--accent); }
+    .q-grid-legend i.answered { background: var(--accent-soft); border-color: var(--accent); }
     .q-grid-legend i.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
     .q-grid-legend i.current { outline: 2px solid var(--accent); }
-    .q-grid-legend i.wrong { background: #7f1d1d; border-color: var(--danger); }
-    .q-grid-legend i.correct-q { background: #14532d; border-color: var(--success); }
+    .q-grid-legend i.wrong { background: var(--legend-wrong-bg); border-color: var(--danger); }
+    .q-grid-legend i.correct-q { background: var(--legend-correct-bg); border-color: var(--success); }
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -129,7 +123,7 @@
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-hover); }
     .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: #2d3d52; }
+    .btn-secondary:hover { background: var(--btn-secondary-hover); }
     .btn-danger { background: var(--danger); color: #fff; }
     .progress-bar {
       height: 6px;
@@ -179,9 +173,9 @@
       transition: border-color 0.15s, background 0.15s;
     }
     .option:hover { border-color: var(--border); }
-    .option.selected { border-color: var(--accent); background: #1e3a5f; }
-    .option.correct { border-color: var(--success); background: #14532d33; }
-    .option.incorrect { border-color: var(--danger); background: #7f1d1d33; }
+    .option.selected { border-color: var(--accent); background: var(--accent-soft); }
+    .option.correct { border-color: var(--success); background: var(--success-soft); }
+    .option.incorrect { border-color: var(--danger); background: var(--danger-soft); }
     .option.chosen { box-shadow: inset 0 0 0 1px var(--accent); }
     .option.correct.chosen { box-shadow: inset 0 0 0 1px var(--success); }
     .option.incorrect.chosen { box-shadow: inset 0 0 0 1px var(--danger); }
@@ -223,12 +217,12 @@
       font-size: 0.75rem;
       font-variant-numeric: tabular-nums;
     }
-    .q-grid button.answered { background: #1e3a5f; border-color: var(--accent); }
-    .q-grid button.wrong { background: #7f1d1d55; border-color: var(--danger); color: #fecaca; }
-    .q-grid button.correct-q { background: #14532d55; border-color: var(--success); color: #bbf7d0; }
+    .q-grid button.answered { background: var(--accent-soft); border-color: var(--accent); }
+    .q-grid button.wrong { background: var(--danger-soft-solid); border-color: var(--danger); color: var(--danger-text); }
+    .q-grid button.correct-q { background: var(--success-soft-solid); border-color: var(--success); color: var(--success-text); }
     .q-grid button.flagged { box-shadow: inset 0 0 0 2px var(--warning); }
     .q-grid button.current { outline: 2px solid var(--accent); }
-    .q-grid button.current.wrong { outline-color: #fca5a5; }
+    .q-grid button.current.wrong { outline-color: var(--danger-outline); }
     .wrong-answers-panel {
       margin-top: 0.85rem;
       padding-top: 0.85rem;
@@ -251,22 +245,22 @@
       min-width: 2rem;
       padding: 0.35rem 0.45rem;
       border: 1px solid var(--danger);
-      background: #7f1d1d55;
-      color: #fecaca;
+      background: var(--danger-soft-solid);
+      color: var(--danger-text);
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.75rem;
       font-variant-numeric: tabular-nums;
     }
-    .wrong-answers-list button.current { outline: 2px solid #fca5a5; }
+    .wrong-answers-list button.current { outline: 2px solid var(--danger-outline); }
     .results-hero {
       text-align: center;
       padding: 2rem 1rem;
       border-radius: 12px;
       margin-bottom: 1.5rem;
     }
-    .results-hero.pass { background: #14532d44; border: 1px solid var(--success); }
-    .results-hero.fail { background: #7f1d1d44; border: 1px solid var(--danger); }
+    .results-hero.pass { background: var(--success-hero); border: 1px solid var(--success); }
+    .results-hero.fail { background: var(--danger-hero); border: 1px solid var(--danger); }
     .results-hero h2 { font-size: 2rem; margin-bottom: 0.25rem; }
     .results-hero .pct { font-size: 3rem; font-weight: 700; }
     .results-hero.pass .pct { color: var(--success); }
@@ -333,7 +327,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 20, 25, 0.85);
+      background: var(--overlay);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -363,7 +357,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 20, 25, 0.9);
+      background: var(--overlay-strong);
       z-index: 110;
       align-items: center;
       justify-content: center;
@@ -450,7 +444,7 @@
     .test-mode-card:hover { border-color: var(--accent); }
     .test-mode-card.selected {
       border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.08);
+      background: var(--accent-soft-alpha);
     }
     .test-mode-card .mode-title {
       font-weight: 600;
@@ -472,8 +466,8 @@
       background: var(--border);
       color: var(--muted);
     }
-    .test-mode-card .mode-status.done { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-    .test-mode-card .mode-status.progress { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
+    .test-mode-card .mode-status.done { background: var(--success-status-bg); color: var(--success); }
+    .test-mode-card .mode-status.progress { background: var(--warning-status-bg); color: var(--warning); }
 
     .welcome-actions {
       display: flex;
@@ -519,11 +513,14 @@
       <h1>PMP Mock Exam(Andrew Ramdyal)</h1>
       <p>200 Ultra Hard Questions · Andrew Ramdayal series · Pass: 70%</p>
     </div>
-    <div class="header-stats" id="headerStats" hidden>
+    <div class="header-end">
+      <div class="header-stats" id="headerStats" hidden>
       <span>Answered: <strong id="answeredCount">0</strong>/<strong id="totalCount">200</strong></span>
       <span>Time remaining: <strong class="timer" id="timer">04:15:33</strong></span>
       <span id="sectionBadge" class="section-badge" hidden>Section 1 of 3</span>
       <span id="saveStatus" class="save-status" hidden aria-live="polite">Saved</span>
+      </div>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" title="Light mode">&#9728;</button>
     </div>
   </header>
 
@@ -1595,5 +1592,6 @@
 
     init();
   </script>
+  <script src="pmp-theme.js"></script>
 </body>
 </html>
