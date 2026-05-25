@@ -34,6 +34,12 @@ python scripts/cleanup_question_text.py
 # Include video explanations (Andrew mock)
 python scripts/cleanup_question_text.py --explanations
 
+# Re-sync YouTube timestamps from captions (requires yt-dlp + VTT files)
+python -m yt_dlp --write-auto-sub --sub-lang en --skip-download -o scripts/yt_sub "https://www.youtube.com/watch?v=1sWpc6765AI"
+python -m yt_dlp --write-auto-sub --sub-lang en --skip-download -o scripts/yt_sub_mindset "https://www.youtube.com/watch?v=-u0rO-YQr9c"
+python scripts/sync_video_timestamps.py --exam andrew
+python scripts/sync_video_timestamps.py --exam mindset
+
 # All three mocks (questions/options only)
 python scripts/cleanup_question_text.py --all-mocks
 ```
