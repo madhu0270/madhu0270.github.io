@@ -27,6 +27,15 @@ python scripts/compare_and_build.py
 
 # 3. Merge PDF text/options/answers into pmp-mock-andrew.html (keeps explanations & video links)
 python scripts/patch_html_questions.py
+
+# 4. Fix PDF spacing/typos in question text and options
+python scripts/cleanup_question_text.py
+
+# Include video explanations (Andrew mock)
+python scripts/cleanup_question_text.py --explanations
+
+# All three mocks (questions/options only)
+python scripts/cleanup_question_text.py --all-mocks
 ```
 
 ### Files
