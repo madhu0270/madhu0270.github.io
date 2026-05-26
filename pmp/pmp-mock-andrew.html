@@ -813,11 +813,16 @@
     function migrateState(s) {
       if (!s.testMode) s.testMode = selectedTestMode || "full";
       const cfg = getExamConfig(s.testMode);
-      if (s.startedAt && !s.examDeadline && !s.submitted) {
-        s.examDeadline = s.startedAt + cfg.totalMs;
-      }
       if (!Array.isArray(s.breaksSkipped)) s.breaksSkipped = [];
       if (s.paused == null) s.paused = false;
+      if (s.paused) {
+        if (s.remainingWhenPaused == null && s.examDeadline) {
+          s.remainingWhenPaused = Math.max(0, s.examDeadline - Date.now());
+        }
+        s.examDeadline = null;
+      } else if (s.startedAt && !s.examDeadline && !s.submitted) {
+        s.examDeadline = s.startedAt + cfg.totalMs;
+      }
       return s;
     }
 
@@ -937,15 +942,32 @@
     }
 
     function initExamTimer() {
+      if (state.paused) return;
       const now = Date.now();
       state.startedAt = state.startedAt || now;
       const cfg = getExamConfig(state.testMode);
       if (!state.examDeadline) state.examDeadline = state.startedAt + cfg.totalMs;
     }
 
-    function getRemainingMs() {
+    function captureRemainingMs() {
+      if (state.onBreak && state.remainingAtBreakStart != null) {
+        return state.remainingAtBreakStart;
+      }
       if (state.paused && state.remainingWhenPaused != null) {
         return state.remainingWhenPaused;
+      }
+      const cfg = getExamConfig(state.testMode);
+      if (!state.examDeadline) return cfg.totalMs;
+      return Math.max(0, state.examDeadline - Date.now());
+    }
+
+    function getRemainingMs() {
+      if (state.paused) {
+        const cfg = getExamConfig(state.testMode);
+        return state.remainingWhenPaused != null ? state.remainingWhenPaused : cfg.totalMs;
+      }
+      if (state.onBreak && state.remainingAtBreakStart != null) {
+        return state.remainingAtBreakStart;
       }
       const cfg = getExamConfig(state.testMode);
       if (!state.examDeadline) return cfg.totalMs;
@@ -1014,11 +1036,12 @@
       const checkpoint = state.pendingBreakCheckpoint;
       if (checkpoint == null) return;
       if (!state.breaksSkipped.includes(checkpoint)) state.breaksSkipped.push(checkpoint);
-      state.remainingAtBreakStart = getRemainingMs();
+      state.remainingAtBreakStart = captureRemainingMs();
       state.onBreak = true;
       state.breakEndsAt = Date.now() + getExamConfig(state.testMode).breakMs;
       state.pendingBreakCheckpoint = null;
       $("startBreakBtn").style.display = "none";
+      stopTimer();
       clearInterval(breakInterval);
       breakInterval = setInterval(() => {
         const left = state.breakEndsAt - Date.now();
@@ -1052,10 +1075,7 @@
 
     function pauseExam() {
       if (state.submitted || state.reviewMode) return;
-      let remaining = getRemainingMs();
-      if (state.onBreak && state.remainingAtBreakStart != null) {
-        remaining = state.remainingAtBreakStart;
-      }
+      const remaining = captureRemainingMs();
       stopTimer();
       state.onBreak = false;
       state.breakEndsAt = null;
@@ -1063,6 +1083,7 @@
       state.pendingBreakCheckpoint = null;
       $("breakOverlay").classList.remove("active");
       state.remainingWhenPaused = remaining;
+      state.examDeadline = null;
       state.paused = true;
       saveState();
       updateWelcomeButtons();
@@ -1072,13 +1093,15 @@
 
     function resumeExam() {
       if (state.submitted) return;
-      if (getRemainingMs() <= 0) {
+      const remaining =
+        state.paused && state.remainingWhenPaused != null
+          ? state.remainingWhenPaused
+          : captureRemainingMs();
+      if (remaining <= 0) {
         submitExam(true);
         return;
       }
-      if (state.remainingWhenPaused != null) {
-        state.examDeadline = Date.now() + state.remainingWhenPaused;
-      }
+      state.examDeadline = Date.now() + remaining;
       state.paused = false;
       state.remainingWhenPaused = null;
       state.reviewMode = false;
@@ -1566,6 +1589,7 @@
 
       if (
         !state.submitted &&
+        !state.paused &&
         state.examDeadline &&
         answeredCount() > 0 &&
         getRemainingMs() <= 0
