@@ -117,8 +117,8 @@
       "Decide how to distribute the award based on informal feedback from the team."
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 10,
@@ -342,8 +342,8 @@
       "Coordinate with operational departments to minimize disruption during the upgrade."
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 27,
@@ -446,8 +446,8 @@
       "Have the team recalibrate the point system to better dif ferentiate between simple and complex tasks"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 35,
@@ -550,8 +550,8 @@
       "Engage a consultant to provide expert advice on streamlining the hardware upgrade process"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 43,
@@ -628,8 +628,8 @@
       "Allocated additional funds to hire a temporary specialist if needed"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 49,
@@ -1005,8 +1005,8 @@
       "Communicate the progress and adjust the timelines for these enhancements to the finance department"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 78,
@@ -1044,8 +1044,8 @@
       "Conduct a series of stakeholder workshops to prioritize software enhancements based on impact"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 81,
@@ -1295,8 +1295,8 @@
       "Instruct the lead developer to prioritize refining the software's performance and user experience"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 100,
@@ -1321,8 +1321,8 @@
       "Align with the senior team member's suggestion and initiate detailed planning for subsequent project stages"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 102,
@@ -1360,10 +1360,10 @@
       "Use detailed estimation methods derived from a comprehensive work breakdown structure (WBS)"
     ],
     "multi": true,
-    "answerRaw": "B & D",
+    "answerRaw": "B & C",
     "correctIndices": [
       1,
-      3
+      2
     ]
   },
   {
@@ -1415,8 +1415,8 @@
       "Implement a more flexible project timeline to account for the learning curve associated with adapting to remote work"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 109,
@@ -1428,8 +1428,8 @@
       "Increase working hours to cover more tasks in less time"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 110,
@@ -1441,22 +1441,21 @@
       "Directly implement the timeline extension, prioritizing regulatory compliance over existing schedules"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 111,
-    "text": "Halfway through a software development project, the project manager identifies that an important security feature was omitte",
+    "text": "Halfway through a software development project, the project manager identifies that an important security feature was omitted. This feature is essential for the software to meet industry security guidelines. The project manager understands that integrating this feature promptly is crucial to prevent potential security breaches. What is the most effective course of action for the project manager to take next?",
     "options": [
-      "This feature is essential for the software to meet industry security guidelines. The project manager understands that integrating this feature promptly is crucial to prevent potential security breaches. What is the most ef fective course of action for the project manager to take next?",
-      "Schedule an ur gent meeting with stakeholders to discuss the implications of incorporating the security feature",
+      "Schedule an urgent meeting with stakeholders to discuss the implications of incorporating the security feature",
       "Conduct an impact assessment to understand the impact of adding the security feature at this stage of the project",
       "Prioritize the security feature in the project's backlog, ensuring it is addressed in the next phase of development",
       "Seek additional resources to include the security feature without altering the current project milestones"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 112,
@@ -1525,13 +1524,12 @@
   },
   {
     "id": 117,
-    "text": "After a project milestone, a team member voices concerns over the lack of detailed feedback regarding their project contributions. The individual feels that without specific insights, their ability to improve and impact the project positively is limite",
+    "text": "After a project milestone, a team member voices concerns over the lack of detailed feedback regarding their project contributions. The individual feels that without specific insights, their ability to improve and impact the project positively is limited. What step should the project manager consider first?",
     "options": [
-      "What step should the project manager consider first?",
       "Schedule an all-hands meeting to discuss project performance and individual contributions openly",
       "Establish an online forum for the project team to post accomplishments and receive peer feedback",
       "Introduce a quarterly review system that focuses on project-specific achievements and growth areas",
-      "Enhance documentation of individual performance metrics and provide regular , personalized feedback sessions"
+      "Enhance documentation of individual performance metrics and provide regular, personalized feedback sessions"
     ],
     "multi": false,
     "answerRaw": "D",
@@ -1539,9 +1537,8 @@
   },
   {
     "id": 118,
-    "text": "During a project review , the client identifies a crucial feature in the new software application that was discussed but not implemente",
+    "text": "During a project review, the client identifies a crucial feature in the new software application that was discussed but not implemented. The project manager verifies that this feature was indeed documented as part of the project scope. What should the project manager undertake as a primary action?",
     "options": [
-      "The project manager verifies that this feature was indeed documented as part of the project scope. What should the project manager undertake as a primary action?",
       "Initiate a brainstorming session with stakeholders to identify alternative solutions for the missing feature",
       "Arrange a detailed discussion with the project team to understand the oversight and develop a corrective action plan",
       "Commission an external audit to evaluate the project management processes and identify gaps",
@@ -1618,9 +1615,8 @@
   },
   {
     "id": 124,
-    "text": "Upon discovering a critical design issue in a software project, stakeholders are uncertain about proceeding with the implementation as planne",
+    "text": "Upon discovering a critical design issue in a software project, stakeholders are uncertain about proceeding with the implementation as planned. What is the most effective step for the project manager to take to address stakeholder concerns?",
     "options": [
-      "What is the most ef fective step for the project manager to take to address stakeholder concerns?",
       "Recommend a comprehensive overhaul of the project design",
       "Update the project's quality assurance procedures to encompass this new discovery",
       "Initiate a thorough risk evaluation to ascertain the flaw's potential impacts on project deliverables",
@@ -1670,8 +1666,8 @@
       "Revisit and adjust the project scope to better align with current project realities and client needs"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 128,
@@ -1683,8 +1679,8 @@
       "Rely on external research findings to make the decision based on best practices in urban park development"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 129,
@@ -1701,10 +1697,9 @@
   },
   {
     "id": 130,
-    "text": "A project manager is leading the development of a new public park in a densely populated urban are",
+    "text": "A project manager is leading the development of a new public park in a densely populated urban area. Community leaders have raised concerns about the project's approach to maintaining the natural habitat and promoting biodiversity. What should the project manager do next?",
     "options": [
-      "Community leaders have raised concerns about the project's approach to maintaining the natural habitat and promoting biodiversity . What should the project manager do next?",
-      "Or ganize for community leaders to detail their concerns about the project and its impact on the area",
+      "Organize for community leaders to detail their concerns about the project and its impact on the area",
       "Distribute an informational brochure detailing the environmental benefits of the new park design",
       "Host a virtual presentation with experts discussing the project's impact on local wildlife and ecosystems",
       "Launch a community feedback initiative to gather suggestions on further improving the park's environmental friendliness"
@@ -2039,8 +2034,8 @@
       "Or ganize a quarterly in-person meet-up for team building and detailed project review discussions"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 156,
@@ -2411,8 +2406,8 @@
       "Or ganize a meeting with the entire team to assess needs, evaluate alternatives, and decide on the best collaboration tools"
     ],
     "multi": false,
-    "answerRaw": "D",
-    "correct": 3
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 184,
@@ -2437,8 +2432,8 @@
       "Reduce operational expenses by optimizing team workflows and resource utilization"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 186,
@@ -2554,8 +2549,8 @@
       "Introduce mandatory team-building activities to encourage collaboration and increase motivation."
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 195,
@@ -2619,8 +2614,8 @@
       "Coordinate with the IT department to promptly renew the software license"
     ],
     "multi": false,
-    "answerRaw": "D",
-    "correct": 3
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 200,
