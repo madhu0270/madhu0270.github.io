@@ -117,8 +117,8 @@
       "Decide how to distribute the award based on informal feedback from the team."
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 10,
@@ -342,8 +342,8 @@
       "Coordinate with operational departments to minimize disruption during the upgrade."
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 27,
@@ -446,8 +446,8 @@
       "Have the team recalibrate the point system to better dif ferentiate between simple and complex tasks"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 35,
@@ -550,8 +550,8 @@
       "Engage a consultant to provide expert advice on streamlining the hardware upgrade process"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 43,
@@ -628,8 +628,8 @@
       "Allocated additional funds to hire a temporary specialist if needed"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 49,
@@ -1005,8 +1005,8 @@
       "Communicate the progress and adjust the timelines for these enhancements to the finance department"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 78,
@@ -1044,8 +1044,8 @@
       "Conduct a series of stakeholder workshops to prioritize software enhancements based on impact"
     ],
     "multi": false,
-    "answerRaw": "D",
-    "correct": 3
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 81,
@@ -1295,8 +1295,8 @@
       "Instruct the lead developer to prioritize refining the software's performance and user experience"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 100,
@@ -1415,8 +1415,8 @@
       "Implement a more flexible project timeline to account for the learning curve associated with adapting to remote work"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 109,
@@ -1428,8 +1428,8 @@
       "Increase working hours to cover more tasks in less time"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 110,
@@ -1441,8 +1441,8 @@
       "Directly implement the timeline extension, prioritizing regulatory compliance over existing schedules"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 111,
@@ -1454,8 +1454,8 @@
       "Seek additional resources to include the security feature without altering the current project milestones"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 112,
@@ -1666,8 +1666,8 @@
       "Revisit and adjust the project scope to better align with current project realities and client needs"
     ],
     "multi": false,
-    "answerRaw": "D",
-    "correct": 3
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 128,
@@ -2034,8 +2034,8 @@
       "Or ganize a quarterly in-person meet-up for team building and detailed project review discussions"
     ],
     "multi": false,
-    "answerRaw": "B",
-    "correct": 1
+    "answerRaw": "A",
+    "correct": 0
   },
   {
     "id": 156,
@@ -2406,8 +2406,8 @@
       "Or ganize a meeting with the entire team to assess needs, evaluate alternatives, and decide on the best collaboration tools"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 184,
@@ -2432,8 +2432,8 @@
       "Reduce operational expenses by optimizing team workflows and resource utilization"
     ],
     "multi": false,
-    "answerRaw": "A",
-    "correct": 0
+    "answerRaw": "C",
+    "correct": 2
   },
   {
     "id": 186,
@@ -2549,8 +2549,8 @@
       "Introduce mandatory team-building activities to encourage collaboration and increase motivation."
     ],
     "multi": false,
-    "answerRaw": "D",
-    "correct": 3
+    "answerRaw": "B",
+    "correct": 1
   },
   {
     "id": 195,
@@ -2614,8 +2614,8 @@
       "Coordinate with the IT department to promptly renew the software license"
     ],
     "multi": false,
-    "answerRaw": "C",
-    "correct": 2
+    "answerRaw": "D",
+    "correct": 3
   },
   {
     "id": 200,

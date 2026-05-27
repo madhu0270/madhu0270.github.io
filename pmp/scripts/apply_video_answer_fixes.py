@@ -13,8 +13,27 @@ EXPL_MISMATCHES = PMP_ROOT / "scripts" / "explanation_mismatches.json"
 
 # User-verified + always prefer video when listed here
 MANUAL: dict[int, int] = {
-    101: 1,  # B — consult project organization guidelines
+    9: 2,  # C — professional development (user-verified; matches embedded explanation)
+    101: 1,  # B — consult project organization guidelines (user-requested)
     128: 0,  # A — collaborative session (video @ 4:28:37; bad keyword_zone had forced D)
+    # PDF key (pinned; do not re-apply video overrides)
+    26: 1,
+    34: 0,
+    42: 1,
+    48: 0,
+    77: 1,
+    80: 0,
+    99: 2,
+    108: 2,
+    109: 2,
+    110: 1,
+    111: 0,
+    127: 1,
+    155: 0,
+    183: 3,
+    185: 2,
+    194: 1,
+    199: 3,
 }
 
 # Multi-select (Choose 2): qid -> sorted 0-based indices
@@ -62,7 +81,11 @@ def build_correction_map(questions: list[dict]) -> dict[int, int]:
                 pass
             else:
                 continue
+            if qid in MANUAL:
+                continue
             corrections[qid] = idx
+
+    corrections.update(MANUAL)
 
     return corrections
 

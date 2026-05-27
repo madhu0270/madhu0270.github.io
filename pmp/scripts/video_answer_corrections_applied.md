@@ -1,42 +1,25 @@
 # Video-authoritative answer corrections (Andrew 200)
 
-When the PDF answer key disagrees with Andrew Ramdayal's YouTube walkthrough (`1sWpc6765AI`), **the video is treated as correct**.
+When the PDF answer key disagrees with Andrew Ramdayal's YouTube walkthrough (`1sWpc6765AI`), **the video is treated as correct** only for questions listed below. All other questions use the **PDF key**.
 
-## Applied corrections (18 questions)
+## Active mock overrides (not PDF)
 
-| Q | Was | Now | Video time |
-|---|-----|-----|------------|
-| 9 | C | **B** | 20:00 |
-| 26 | B | **A** | 57:25 |
-| 34 | A | **C** | 1:15:50 (explicit in video) |
-| 42 | B | **C** | 1:29:48 |
-| 48 | A | **C** | 1:42:42 |
-| 77 | B | **A** | 2:40:25 |
-| 80 | A | **D** | 2:45:31 |
-| 99 | C | **A** | 3:30:59 |
-| **101** | A | **B** | 3:35:33 (user-reported; consult organization guidelines) |
-| **104** | B & D | **B & C** | 3:42:20 (Choose 2 — video says “B and C”; PDF key was wrong) |
-| 108 | C | **A** | 3:49:56 |
-| 109 | C | **A** | 3:51:51 |
-| 110 | B | **C** | 3:53:45 |
-| 127 | B | **D** | 4:26:38 |
-| 155 | A | **B** | 5:18:44 |
+| Q | PDF | Mock | Video time | Notes |
+|---|-----|------|------------|-------|
+| 9 | B | **C** | 20:00 | User-verified; matches embedded explanation |
+| **101** | A | **B** | 3:35:33 | Consult project organization guidelines |
+| **104** | B & D | **B & C** | 3:42:20 | Choose 2 — progressive elaboration + iterative planning |
+| 128 | D | **A** | 4:28:37 | Collaborative session; bad `keyword_zone` had forced D |
 
-**Q128** — reverted to **A** (collaborative session). A prior `keyword_zone` run wrongly changed A→D; Andrew’s explanation @ 4:28:37 supports A. Pinned in `apply_video_answer_fixes.py` `MANUAL`.
-| 183 | D | **C** | 6:09:25 |
-| 185 | C | **A** | 6:13:02 (explicit in video) |
-| 194 | B | **D** | 6:29:18 |
-| 199 | D | **C** | 6:38:20 |
+Pinned in `apply_video_answer_fixes.py` (`MANUAL` / `MANUAL_MULTI`).
 
-Updated: `pmp-mock-andrew.html`, `scripts/ar200_from_pdf.json`
+## Reverted to PDF (formerly video overrides)
+
+Q26, Q34, Q42, Q48, Q77, Q80, Q99, Q108, Q109, Q110, Q111, Q127, Q155, Q183, Q185, Q194, Q199 — mock now matches `AR_200.pdf`.
+
+Updated: `pmp-mock-andrew.html`, `scripts/ar200_from_pdf.json`, `ANSWER_KEYS.txt`
 
 ## Audit scripts
-
-- `extract_video_correct_answers.py` — scan VTT explanation segments vs stored answers
-- `find_explanation_answer_mismatches.py` — explanation text vs stored `correct`
-- `apply_video_answer_fixes.py` — apply high-confidence + manual overrides
-
-Re-run audit:
 
 ```bash
 python scripts/extract_video_correct_answers.py
