@@ -2,7 +2,7 @@
 
 When the PDF answer key disagrees with Andrew Ramdayal's YouTube walkthrough (`1sWpc6765AI`), **the video is treated as correct**.
 
-## Applied corrections (19 questions)
+## Applied corrections (18 questions)
 
 | Q | Was | Now | Video time |
 |---|-----|-----|------------|
@@ -20,8 +20,9 @@ When the PDF answer key disagrees with Andrew Ramdayal's YouTube walkthrough (`1
 | 109 | C | **A** | 3:51:51 |
 | 110 | B | **C** | 3:53:45 |
 | 127 | B | **D** | 4:26:38 |
-| 128 | A | **D** | 4:28:37 |
 | 155 | A | **B** | 5:18:44 |
+
+**Q128** — reverted to **A** (collaborative session). A prior `keyword_zone` run wrongly changed A→D; Andrew’s explanation @ 4:28:37 supports A. Pinned in `apply_video_answer_fixes.py` `MANUAL`.
 | 183 | D | **C** | 6:09:25 |
 | 185 | C | **A** | 6:13:02 (explicit in video) |
 | 194 | B | **D** | 6:29:18 |

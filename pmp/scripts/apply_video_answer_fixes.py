@@ -14,6 +14,7 @@ EXPL_MISMATCHES = PMP_ROOT / "scripts" / "explanation_mismatches.json"
 # User-verified + always prefer video when listed here
 MANUAL: dict[int, int] = {
     101: 1,  # B — consult project organization guidelines
+    128: 0,  # A — collaborative session (video @ 4:28:37; bad keyword_zone had forced D)
 }
 
 # Multi-select (Choose 2): qid -> sorted 0-based indices
