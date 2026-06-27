@@ -923,6 +923,11 @@ html[data-theme="dark"] .theme-toggle-icon--moon {
   align-items: flex-start;
 }
 
+.cred-card-head > div:last-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .cred-logo-wrap {
   flex-shrink: 0;
   width: 52px;
@@ -936,6 +941,25 @@ html[data-theme="dark"] .theme-toggle-icon--moon {
 
 .cred-logo-wrap--google {
   background: #fff;
+}
+
+.cred-logo-wrap.cred-logo-wrap--pmp {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  min-width: 88px;
+  padding: 0;
+  background: #fff;
+  border: none;
+  overflow: hidden;
+}
+
+.cred-logo--pmp {
+  display: block;
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  border-radius: 50%;
 }
 
 .cred-logo-wrap--hks {
