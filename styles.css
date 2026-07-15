@@ -882,6 +882,22 @@ html[data-theme="dark"] .theme-toggle-icon--moon {
   margin-top: 0.65rem;
 }
 
+.timeline-highlights {
+  margin: 0.65rem 0 0;
+  padding-left: 1.25rem;
+  color: var(--ink-muted);
+  max-width: 62ch;
+}
+
+.timeline-highlights li {
+  margin-top: 0.4rem;
+  line-height: 1.55;
+}
+
+.timeline-highlights li:first-child {
+  margin-top: 0;
+}
+
 .journey-note {
   margin: 0;
   font-size: 0.9375rem;

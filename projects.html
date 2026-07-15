@@ -6,11 +6,11 @@
     <title>Side projects &amp; web tools | Madhusudan Dhakite</title>
     <meta
       name="description"
-      content="Side projects by Madhusudan Dhakite: invoice generator, mFin finance planner, jsPDF prescription demo, Enamel Craft dental site, and static portfolio, stack notes, live previews, and delivery context."
+      content="Side projects by Madhusudan Dhakite: Dentra dental clinic PMS, invoice generator, mFin finance planner, jsPDF prescription demo, Enamel Craft dental site, and static portfolio."
     />
     <meta
       name="keywords"
-      content="Madhusudan Dhakite projects, invoice generator, mFin app, prescription PDF generator, jsPDF, static portfolio, dental clinic website, web tools QA manager"
+      content="Madhusudan Dhakite projects, Dentra dental PMS, invoice generator, mFin app, prescription PDF generator, jsPDF, static portfolio, dental clinic website, web tools QA manager"
     />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://mdhakite.xyz/projects.html" />
@@ -45,7 +45,7 @@
         "@type": "WebPage",
         "name": "Side projects and web tools",
         "url": "https://mdhakite.xyz/projects.html",
-        "description": "Detailed overview of Madhusudan Dhakite's public web apps and client sites: invoice generator, mFin, PDF tools, healthcare marketing site, and portfolio.",
+        "description": "Detailed overview of Madhusudan Dhakite's public web apps and client sites: Dentra, invoice generator, mFin, PDF tools, healthcare marketing site, and portfolio.",
         "isPartOf": {
           "@type": "WebSite",
           "name": "Madhusudan Dhakite",
@@ -123,6 +123,53 @@
           <a class="btn btn-ghost" href="index.html#connect">Hire or collaborate</a>
         </div>
       </header>
+
+      <article class="project-detail" id="dentra">
+        <div class="project-detail-header">
+          <p class="project-detail-kind">Web app · Healthcare · Dentra</p>
+          <time datetime="2026-06">Jun 2026</time>
+        </div>
+        <h2 class="project-detail-title">Dentra — dental clinic management</h2>
+        <div class="project-detail-grid">
+          <figure class="project-detail-visual">
+            <img
+              src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+              width="1200"
+              height="675"
+              alt="Modern dental clinic reception with clean interior"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <div class="project-detail-body">
+            <p>
+              <strong>Dentra</strong> is a local-first patient management system — a generic
+              clinic solution that replaces scattered spreadsheets with one friendly web app for
+              patients, appointments, billing, prescriptions, treatment plans, and file storage —
+              all running on the clinic’s own PC.
+            </p>
+            <p>
+              The stack is <strong>Node.js + Express + SQLite</strong> on the backend and a
+              vanilla JS SPA on the frontend, with an Apple-inspired UI in teal. Staff get
+              role-based access, Excel import, PDF prescriptions and invoices, WhatsApp
+              reminders, reports, and full backup/restore.
+            </p>
+            <ul class="project-detail-list">
+              <li><strong>Problem:</strong> clinic ops split across sheets, folders, and ad-hoc tools.</li>
+              <li><strong>Approach:</strong> local-first architecture with Windows installer and in-app updates.</li>
+              <li><strong>Outcome:</strong> a production app non-technical staff install and run daily.</li>
+            </ul>
+            <dl class="project-detail-tech">
+              <dt>Stack &amp; notes</dt>
+              <dd>Node.js · Express · SQLite · Vanilla JS SPA · jsPDF · Windows installer · in-app updates</dd>
+            </dl>
+            <div class="project-detail-cta">
+              <a class="btn btn-primary" href="dentra.html">About Dentra</a>
+              <a class="btn btn-ghost" href="index.html#connect">Discuss a similar build</a>
+            </div>
+          </div>
+        </div>
+      </article>
 
       <article class="project-detail" id="invoice-generator">
         <div class="project-detail-header">

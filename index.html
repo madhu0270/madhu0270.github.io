@@ -72,7 +72,11 @@
           "Static site hosting",
           "PDF generation in the browser",
           "Financial planning software",
-          "Healthcare web applications"
+          "Healthcare web applications",
+          "Agentic AI",
+          "Large language models",
+          "Model Context Protocol",
+          "Autonomous test automation"
         ]
       }
     </script>
@@ -86,30 +90,36 @@
           {
             "@type": "ListItem",
             "position": 1,
+            "name": "Dentra — dental clinic management",
+            "item": "https://mdhakite.xyz/dentra.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
             "name": "Invoice generator (small business)",
             "item": "https://mdhakite.xyz/invoice-generator.html"
           },
           {
             "@type": "ListItem",
-            "position": 2,
+            "position": 3,
             "name": "Enamel Craft dental clinic website",
             "item": "https://www.enamelcraft.in/"
           },
           {
             "@type": "ListItem",
-            "position": 3,
+            "position": 4,
             "name": "Prescription PDF generator (demo)",
             "item": "https://mdhakite.xyz/prescription-generator.html"
           },
           {
             "@type": "ListItem",
-            "position": 4,
+            "position": 5,
             "name": "Portfolio site (this site)",
             "item": "https://mdhakite.xyz/"
           },
           {
             "@type": "ListItem",
-            "position": 5,
+            "position": 6,
             "name": "mFin, personal finance planner",
             "item": "https://mdhakite.xyz/budgetplanner.html"
           }
@@ -137,7 +147,7 @@
         <div class="header-tools">
           <nav class="nav" aria-label="Primary">
             <a href="#about">About</a>
-            <a href="projects.html">Projects</a>
+            <a href="projects.html">Freelance projects</a>
             <a href="#blog">Blog</a>
             <a href="#podcast">Podcast</a>
             <a href="#connect">Contact</a>
@@ -174,7 +184,7 @@
       </div>
       <div id="nav-panel" class="nav-panel" hidden>
         <a href="#about">About</a>
-        <a href="projects.html">Projects</a>
+        <a href="projects.html">Freelance projects</a>
         <a href="#blog">Blog</a>
         <a href="#podcast">Podcast</a>
         <a href="#connect">Contact</a>
@@ -203,8 +213,15 @@
             />
             <p class="hero-lede">
               <strong>Twelve years</strong> in QA and test automation. I’m
-              <strong>Software Quality Assurance Manager</strong> in Pune, connecting product
-              intent with delivery, from requirements through release. I also
+              <strong>Software Quality Assurance Manager</strong> at
+              <a
+                href="https://www.linkedin.com/company/zinniatm"
+                target="_blank"
+                rel="noopener noreferrer"
+                ><strong>Zinnia</strong></a
+              >
+              in Pune, leading <strong>Zenius</strong>—agentic AI workflows that turn JIRA
+              stories and BRDs into autonomous, LLM-driven test execution. I also
               <a href="#projects">build web apps on the side</a>.
             </p>
             <div class="hero-cta">
@@ -258,6 +275,20 @@
                   <strong>end-to-end project management</strong>, leading client
                   conversations, refining requirements, tracking execution, and planning
                   releases to keep commitments credible.
+                </p>
+                <p>
+                  At
+                  <a
+                    href="https://www.linkedin.com/company/zinniatm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    ><strong>Zinnia</strong></a
+                  >, I lead <strong>Zenius</strong>, a sub-initiative within the
+                  <strong>MinionBots</strong> agentic AI platform—building autonomous,
+                  LLM-driven workflows that convert requirements into test cases, generate
+                  context-aware test data, and orchestrate execution via
+                  <strong>Model Context Protocol (MCP)</strong>, driving a shift from manual,
+                  reactive QA to agentic, AI-powered testing.
                 </p>
                 <p>
                   My approach is <strong>calm, explicit, and outcome-oriented</strong>. I
@@ -355,7 +386,7 @@
       <section id="projects" class="section section-projects" aria-labelledby="projects-heading">
         <div class="section-inner">
           <header class="projects-head">
-            <h2 id="projects-heading" class="section-label projects-title">My Side Projects</h2>
+            <h2 id="projects-heading" class="section-label projects-title">Freelance projects</h2>
             <p class="section-intro projects-intro">
               Small builds and experiments: interfaces, workflows, and static sites I ship for
               practice and for people who need something that just works.
@@ -363,6 +394,45 @@
             </p>
           </header>
           <ul class="projects-grid">
+            <li>
+              <article class="project-card">
+                <a
+                  class="project-card-visual"
+                  href="dentra.html"
+                  aria-label="Learn about Dentra clinic management app"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=1200&amp;h=675&amp;fit=crop&amp;q=80"
+                    width="1200"
+                    height="675"
+                    alt="Modern dental clinic reception with clean interior"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+                <div class="project-card-body">
+                  <p class="project-card-kind">Web app · Healthcare · Dentra</p>
+                  <h3 class="project-card-title">
+                    <a href="dentra.html">Dentra — dental clinic management</a>
+                  </h3>
+                  <p class="project-card-desc">
+                    Local-first PMS for patients, appointments, billing, prescriptions, and
+                    reports — with a Windows installer and in-app updates.
+                  </p>
+                  <div class="project-card-meta">
+                    <time class="project-card-date" datetime="2026-06">Jun 2026</time>
+                    <div class="project-card-actions">
+                      <a
+                        class="btn btn-primary project-card-preview"
+                        href="dentra.html"
+                        >About Dentra</a
+                      >
+                      <a class="project-card-similar" href="#connect">Need something similar?</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </li>
             <li>
               <article class="project-card">
                 <a
@@ -664,11 +734,34 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     ><strong>Zinnia</strong></a
-                  >, leading quality engineering in insurance
-                  technology, where reliability, regulation, and customer trust meet.
-                  Continuing to grow where scalable automation, delivery discipline, and
-                  thoughtful use of modern tooling (including AI) come together.
+                  >, leading quality engineering in insurance technology, where reliability,
+                  regulation, and customer trust meet.
                 </p>
+                <ul class="timeline-highlights">
+                  <li>
+                    Leading <strong>Zenius</strong>, a sub-initiative within Zinnia’s agentic
+                    AI platform (<strong>MinionBots</strong>), building autonomous, LLM-driven
+                    workflows for end-to-end software testing
+                  </li>
+                  <li>
+                    Designed a system that converts JIRA stories or BRDs directly into
+                    AI-generated test cases, cutting manual test-design effort and turnaround
+                    time
+                  </li>
+                  <li>
+                    Built LLM-powered backend services to auto-generate context-aware test
+                    cases and real-time test data
+                  </li>
+                  <li>
+                    Leveraged <strong>Model Context Protocol (MCP)</strong> to orchestrate and
+                    trigger automated test execution, enabling requirement-to-execution
+                    workflows with minimal manual intervention
+                  </li>
+                  <li>
+                    Driving the shift from manual, reactive QA to autonomous, agentic
+                    AI-powered testing
+                  </li>
+                </ul>
               </div>
             </li>
             <li>
